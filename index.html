@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>𝒌𝒐𝒔𝒊 ♟︎ | onchain_fiend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #050407;
+    --deep: #0a080f;
+    --ink: #10091a;
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dim: #7a6230;
+    --teal: #1de9b6;
+    --teal-dim: rgba(29,233,182,0.15);
+    --purple: #2d1f4e;
+    --purple-mid: #4a2f7a;
+    --text: #e8e0f0;
+    --muted: #8a7fa0;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--gold);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--gold-dim);
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.12s ease;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* GRAIN OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.35;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 500;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    background: linear-gradient(to bottom, rgba(5,4,7,0.95), transparent);
+    backdrop-filter: blur(2px);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    position: relative;
+    padding: 8rem 3rem 4rem;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(74,47,122,0.35) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 20% 70%, rgba(29,233,182,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 80% 80% at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 80%);
+  }
+
+  /* Diagonal accent lines */
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: 
+      repeating-linear-gradient(
+        -35deg,
+        transparent,
+        transparent 180px,
+        rgba(201,168,76,0.025) 180px,
+        rgba(201,168,76,0.025) 181px
+      );
+  }
+
+  .hero-content {
+    position: relative;
+    max-width: 900px;
+    width: 100%;
+    z-index: 2;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--teal);
+  }
+
+  .hero-name {
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    opacity: 0;
+    animation: fadeUp 0.9s 0.35s forwards;
+    margin-bottom: 0.3rem;
+  }
+
+  .hero-name span {
+    color: var(--gold);
+    display: inline-block;
+  }
+
+  .hero-handle {
+    font-family: 'Space Mono', monospace;
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.5s forwards;
+  }
+
+  .hero-tagline {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-weight: 300;
+    line-height: 1.5;
+    color: var(--muted);
+    max-width: 520px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.65s forwards;
+    margin-bottom: 3rem;
+  }
+  .hero-tagline em {
+    color: var(--text);
+    font-style: italic;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.8s forwards;
+  }
+
+  .btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.9rem 2rem;
+    border: 1px solid;
+    transition: all 0.3s;
+    cursor: none;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--black);
+  }
+  .btn-primary:hover {
+    background: var(--gold-light);
+    border-color: var(--gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(201,168,76,0.25);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border-color: rgba(201,168,76,0.4);
+    color: var(--gold);
+  }
+  .btn-ghost:hover {
+    border-color: var(--gold);
+    background: rgba(201,168,76,0.05);
+    transform: translateY(-2px);
+  }
+
+  /* Floating chess piece */
+  .chess-float {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: clamp(6rem, 15vw, 14rem);
+    opacity: 0.06;
+    filter: blur(1px);
+    animation: float 6s ease-in-out infinite;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* SECTION SHARED */
+  section {
+    padding: 6rem 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(29,233,182,0.3), transparent);
+    max-width: 80px;
+  }
+
+  .section-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+  }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+    margin-top: 3rem;
+  }
+
+  .about-text p {
+    font-size: 1.15rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+  }
+  .about-text p strong {
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .stat-box {
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 1.5rem;
+    background: rgba(201,168,76,0.02);
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .stat-box:hover {
+    border-color: rgba(201,168,76,0.4);
+    background: rgba(201,168,76,0.05);
+  }
+
+  .stat-num {
+    font-size: 2.5rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* SERVICES */
+  .services-section {
+    max-width: 1100px;
+    padding: 6rem 3rem;
+    margin: 0 auto;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    margin-top: 3rem;
+    border: 1px solid rgba(201,168,76,0.1);
+    background: rgba(201,168,76,0.1);
+  }
+
+  .service-card {
+    background: var(--black);
+    padding: 2.5rem 2rem;
+    transition: background 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px;
+    height: 0;
+    background: var(--gold);
+    transition: height 0.4s ease;
+  }
+  .service-card:hover::before { height: 100%; }
+  .service-card:hover { background: rgba(201,168,76,0.03); }
+
+  .service-icon {
+    font-size: 1.5rem;
+    margin-bottom: 1.2rem;
+    display: block;
+  }
+
+  .service-title {
+    font-size: 1.3rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 0.8rem;
+  }
+
+  .service-desc {
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .service-tag {
+    margin-top: 1.5rem;
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    border: 1px solid rgba(29,233,182,0.2);
+    padding: 0.3rem 0.7rem;
+  }
+
+  /* PHILOSOPHY / PILLARS */
+  .pillars-section {
+    max-width: 1100px;
+    padding: 6rem 3rem;
+    margin: 0 auto;
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .pillar {
+    padding: 2rem;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .pillar-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.1em;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+  }
+
+  .pillar-title {
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .pillar-text {
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* CTA STRIP */
+  .cta-strip {
+    margin: 2rem 3rem 6rem;
+    padding: 3.5rem 4rem;
+    background: linear-gradient(135deg, rgba(74,47,122,0.3) 0%, rgba(10,8,15,0.8) 60%);
+    border: 1px solid rgba(201,168,76,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-strip::before {
+    content: '♟︎';
+    position: absolute;
+    right: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 8rem;
+    opacity: 0.04;
+    pointer-events: none;
+  }
+
+  .cta-left h2 {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-style: italic;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+  .cta-left p {
+    color: var(--muted);
+    font-size: 1rem;
+    font-weight: 300;
+  }
+
+  /* SOCIALS */
+  .socials-section {
+    max-width: 1100px;
+    padding: 0 3rem 6rem;
+    margin: 0 auto;
+  }
+
+  .socials-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+
+  .social-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border: 1px solid rgba(138,127,160,0.2);
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    cursor: none;
+  }
+  .social-link:hover {
+    color: var(--gold);
+    border-color: rgba(201,168,76,0.4);
+    background: rgba(201,168,76,0.03);
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(201,168,76,0.1);
+    padding: 2rem 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  footer p {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .faith-mark {
+    font-size: 1rem;
+    color: var(--gold-dim);
+  }
+
+  /* DIVIDER */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(201,168,76,0.15), transparent);
+    margin: 0 auto;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(-50%) rotate(0deg); }
+    50% { transform: translateY(-53%) rotate(3deg); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* THREADS */
+  .threads-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-top: 2.5rem;
+    background: rgba(201,168,76,0.1);
+  }
+
+  .thread-card {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    padding: 1.4rem 2rem;
+    background: var(--black);
+    text-decoration: none;
+    transition: background 0.3s;
+    cursor: none;
+  }
+  .thread-card:hover {
+    background: rgba(201,168,76,0.04);
+  }
+  .thread-card:hover .thread-arrow {
+    color: var(--gold);
+    transform: translate(3px, -3px);
+  }
+
+  .thread-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--gold-dim);
+    letter-spacing: 0.1em;
+    flex-shrink: 0;
+    width: 24px;
+  }
+
+  .thread-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .thread-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    border: 1px solid rgba(29,233,182,0.2);
+    padding: 0.25rem 0.6rem;
+    flex-shrink: 0;
+  }
+
+  .thread-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .thread-arrow {
+    font-size: 1.2rem;
+    color: var(--gold-dim);
+    transition: color 0.3s, transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 1.2rem 1.5rem; }
+    nav .nav-links { display: none; }
+    section, .services-section, .pillars-section, .socials-section { padding: 4rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .services-grid { grid-template-columns: 1fr; }
+    .pillars-grid { grid-template-columns: 1fr; }
+    .cta-strip { margin: 1rem 1.5rem 4rem; padding: 2.5rem 2rem; }
+    footer { padding: 1.5rem; }
+    .chess-float { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">𝒌𝒐𝒔𝒊 ♟︎</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#connect">Connect</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="chess-float">♟</div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">𓆩 Son of God 𓆪 · Content & Creative Hub</p>
+    <h1 class="hero-name">𝒌𝒐𝒔𝒊<span>&nbsp;♟︎</span></h1>
+    <p class="hero-handle">@onchain_fiend · x.com/onchain_fiend</p>
+    <p class="hero-tagline">
+      Faith-rooted creator & strategist — <em>writer, clipper, motion designer, graphics designer & AI prompt engineer</em> — operating at the intersection of onchain technology, storytelling, and real economic design.
+    </p>
+    <div class="hero-cta">
+      <a href="#services" class="btn btn-primary">Work With Me</a>
+      <a href="#about" class="btn btn-ghost">Explore My World</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">About</div>
+  <h2 class="section-title reveal">The Missing Link<br>Between Narrative & Chain</h2>
+
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <p>I don't chase hype. <strong>I design clarity.</strong> My goal is to show how ownership, incentives, and culture can be structurally linked onchain.</p>
+      <p>I create long-form educational content that breaks down complex onchain mechanics in <strong>clear, visionary language</strong> — threads that read like mini strategy decks, visuals that make abstract concepts instantly understandable.</p>
+      <p>Multi-time thread contest winner. Growth specialist. At every level, I bridge human narrative with decentralized systems.</p>
+    </div>
+    <div class="about-stats">
+      <div class="stat-box">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Threads Created</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="font-size:1.6rem;">Multi</div>
+        <div class="stat-label">Contest Wins</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">01</div>
+        <div class="stat-label">Onchain Narrative</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num">∴</div>
+        <div class="stat-label">Faith First</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SERVICES -->
+<div class="services-section" id="services">
+  <div class="section-label">Services</div>
+  <h2 class="section-title reveal">What I Bring<br>to the Table</h2>
+
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <span class="service-icon">✍️</span>
+      <h3 class="service-title">Content & Writing</h3>
+      <p class="service-desc">Deep-dive threads on metaverse economics, coordination layers, and narrative resilience. Long-form content that reads like strategy — clean, intentional, value-first.</p>
+      <span class="service-tag">Available</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">⚡</span>
+      <h3 class="service-title">Motion, Design & Clipping</h3>
+      <p class="service-desc">Custom visuals, motion graphics, infographics, and video clipping. I clip, cut, and craft content that hits — turning raw footage into shareable moments that travel.</p>
+      <span class="service-tag">Available</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🤖</span>
+      <h3 class="service-title">AI Prompt Engineering</h3>
+      <p class="service-desc">Crafting powerful prompts for creators and projects. I engineer prompts that unlock real creative and operational leverage — offered openly as a service.</p>
+      <span class="service-tag">Available</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">📈</span>
+      <h3 class="service-title">Growth Consulting</h3>
+      <p class="service-desc">Business development for onchain projects — building sustainable participation loops, storytelling frameworks, and community engagement strategies.</p>
+      <span class="service-tag">Available</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🔗</span>
+      <h3 class="service-title">Onchain Strategy</h3>
+      <p class="service-desc">Helping projects link ownership, incentives, and culture structurally onchain. I map out how finance + social can merge into real coordinated systems.</p>
+      <span class="service-tag">Available</span>
+    </div>
+    <div class="service-card">
+      <span class="service-icon">🫂</span>
+      <h3 class="service-title">Community Building</h3>
+      <p class="service-desc">Starting conversations, amplifying aligned builders, engaging thoughtfully. I show up consistently and build network density — not just followers.</p>
+      <span class="service-tag">Available</span>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PHILOSOPHY -->
+<div class="pillars-section" id="philosophy">
+  <div class="section-label">Philosophy</div>
+  <h2 class="section-title reveal">The Pillars<br>I Build On</h2>
+
+  <div class="pillars-grid reveal">
+    <div class="pillar">
+      <span class="pillar-num">01</span>
+      <div>
+        <h3 class="pillar-title">Economic Immersion over Speculation</h3>
+        <p class="pillar-text">Real participation loops matter more than price. I help projects and audiences understand how to be inside the system — not just watching it.</p>
+      </div>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">02</span>
+      <div>
+        <h3 class="pillar-title">Narrative Resilience</h3>
+        <p class="pillar-text">Stories that survive bear markets. In volatile markets, narrative is the only durable asset. I help build that foundation into projects and content from day one.</p>
+      </div>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">03</span>
+      <div>
+        <h3 class="pillar-title">Metaverse as Coordination Layer</h3>
+        <p class="pillar-text">Not pixels. Not hype. A genuine place where ownership, community, and culture converge into something structurally significant.</p>
+      </div>
+    </div>
+    <div class="pillar">
+      <span class="pillar-num">04</span>
+      <div>
+        <h3 class="pillar-title">Faith as Foundation</h3>
+        <p class="pillar-text">Everything is rooted in something higher. 𓆩 Son of God 𓆪 — this isn't branding. It's the lens through which strategy, creativity, and service are built.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROOF OF WORK -->
+<div class="pillars-section" id="work">
+  <div class="section-label">Proof of Work</div>
+  <h2 class="section-title reveal">Featured<br>Threads</h2>
+
+  <div class="threads-grid reveal">
+    <a href="https://x.com/i/status/1917185357277442507" target="_blank" class="thread-card">
+      <span class="thread-num">01</span>
+      <div class="thread-body">
+        <span class="thread-label">Thread</span>
+        <p class="thread-link">x.com/i/status/1917185357277442507</p>
+      </div>
+      <span class="thread-arrow">↗</span>
+    </a>
+    <a href="https://x.com/i/status/1921557793816887580" target="_blank" class="thread-card">
+      <span class="thread-num">02</span>
+      <div class="thread-body">
+        <span class="thread-label">Thread</span>
+        <p class="thread-link">x.com/i/status/1921557793816887580</p>
+      </div>
+      <span class="thread-arrow">↗</span>
+    </a>
+    <a href="https://x.com/i/status/1884243539070181489" target="_blank" class="thread-card">
+      <span class="thread-num">03</span>
+      <div class="thread-body">
+        <span class="thread-label">Thread</span>
+        <p class="thread-link">x.com/i/status/1884243539070181489</p>
+      </div>
+      <span class="thread-arrow">↗</span>
+    </a>
+    <a href="https://x.com/i/status/1903866651126513905" target="_blank" class="thread-card">
+      <span class="thread-num">04</span>
+      <div class="thread-body">
+        <span class="thread-label">Thread</span>
+        <p class="thread-link">x.com/i/status/1903866651126513905</p>
+      </div>
+      <span class="thread-arrow">↗</span>
+    </a>
+    <a href="https://x.com/i/status/1910394332705661336" target="_blank" class="thread-card">
+      <span class="thread-num">05</span>
+      <div class="thread-body">
+        <span class="thread-label">Thread</span>
+        <p class="thread-link">x.com/i/status/1910394332705661336</p>
+      </div>
+      <span class="thread-arrow">↗</span>
+    </a>
+    <a href="https://drive.google.com/drive/folders/1liyCO2DxQuMrhJTo11QissBP1udh1zDh" target="_blank" class="thread-card" style="background: rgba(201,168,76,0.03);">
+      <span class="thread-num">✦</span>
+      <div class="thread-body">
+        <span class="thread-label" style="color:var(--gold); border-color:rgba(201,168,76,0.3);">Design Work</span>
+        <p class="thread-link">drive.google.com · Motion & Graphics Portfolio</p>
+      </div>
+      <span class="thread-arrow">↗</span>
+    </a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- CTA STRIP -->
+<div class="cta-strip">
+  <div class="cta-left">
+    <h2>Ready to build something real?</h2>
+    <p>Let's bridge your narrative to the chain.</p>
+  </div>
+  <div class="hero-cta">
+    <a href="https://x.com/onchain_fiend" target="_blank" class="btn btn-primary">DM on X →</a>
+  </div>
+</div>
+
+<!-- SOCIALS -->
+<div class="socials-section" id="connect">
+  <div class="section-label">Connect</div>
+  <h2 class="section-title reveal">Find Me<br>Onchain & Off</h2>
+
+  <div class="socials-row reveal">
+    <a href="https://x.com/onchain_fiend" target="_blank" class="social-link">
+      ✕ &nbsp;@onchain_fiend
+    </a>
+    <a href="https://t.me/onchainfiend" target="_blank" class="social-link">
+      ✈ &nbsp;t.me/onchainfiend
+    </a>
+    <a href="https://discord.com" target="_blank" class="social-link">
+      ◈ &nbsp;@gunslinger_001
+    </a>
+    <a href="https://youtube.com/@kosi-creates" target="_blank" class="social-link">
+      ▶ &nbsp;@kosi-creates
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 𝒌𝒐𝒔𝒊 ♟︎ · @onchain_fiend · All rights reserved</p>
+  <span class="faith-mark">𓆩 𓆪</span>
+  <p>Built to bridge narrative & chain</p>
+</footer>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '20px';
+      cursor.style.height = '20px';
+      ring.style.width = '50px';
+      ring.style.height = '50px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px';
+      cursor.style.height = '12px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+    });
+  });
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  reveals.forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
