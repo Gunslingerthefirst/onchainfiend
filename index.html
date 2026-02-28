@@ -3,986 +3,432 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>𝒌𝒐𝒔𝒊 ♟︎ | onchain_fiend</title>
+<title>kosi ♟︎ | onchain_fiend</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #050407;
-    --deep: #0a080f;
-    --ink: #10091a;
-    --gold: #c9a84c;
-    --gold-light: #e8c96a;
-    --gold-dim: #7a6230;
-    --teal: #1de9b6;
-    --teal-dim: rgba(29,233,182,0.15);
-    --purple: #2d1f4e;
-    --purple-mid: #4a2f7a;
-    --text: #e8e0f0;
-    --muted: #8a7fa0;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--black);
-    color: var(--text);
-    font-family: 'Cormorant Garamond', serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* CUSTOM CURSOR */
-  .cursor {
-    position: fixed;
-    width: 12px; height: 12px;
-    border-radius: 50%;
-    background: var(--gold);
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: width 0.2s, height 0.2s, background 0.2s;
-    mix-blend-mode: difference;
-  }
-  .cursor-ring {
-    position: fixed;
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    border: 1px solid var(--gold-dim);
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: all 0.12s ease;
-  }
-  body:hover .cursor { opacity: 1; }
-
-  /* GRAIN OVERLAY */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 1000;
-    opacity: 0.35;
-  }
-
-  /* NAV */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 500;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.5rem 3rem;
-    background: linear-gradient(to bottom, rgba(5,4,7,0.95), transparent);
-    backdrop-filter: blur(2px);
-  }
-
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.1rem;
-    font-style: italic;
-    color: var(--gold);
-    letter-spacing: 0.05em;
-    text-decoration: none;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 2.5rem;
-    list-style: none;
-  }
-
-  .nav-links a {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    transition: color 0.3s;
-  }
-  .nav-links a:hover { color: var(--gold); }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    position: relative;
-    padding: 8rem 3rem 4rem;
-    overflow: hidden;
-  }
-
-  .hero-bg {
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(74,47,122,0.35) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 60% at 20% 70%, rgba(29,233,182,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse 80% 80% at 50% 50%, rgba(201,168,76,0.04) 0%, transparent 80%);
-  }
-
-  /* Diagonal accent lines */
-  .hero-bg::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: 
-      repeating-linear-gradient(
-        -35deg,
-        transparent,
-        transparent 180px,
-        rgba(201,168,76,0.025) 180px,
-        rgba(201,168,76,0.025) 181px
-      );
-  }
-
-  .hero-content {
-    position: relative;
-    max-width: 900px;
-    width: 100%;
-    z-index: 2;
-  }
-
-  .hero-eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 1.5rem;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.2s forwards;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .hero-eyebrow::before {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 1px;
-    background: var(--teal);
-  }
-
-  .hero-name {
-    font-size: clamp(3.5rem, 10vw, 8rem);
-    font-weight: 300;
-    font-style: italic;
-    line-height: 0.9;
-    letter-spacing: -0.02em;
-    color: var(--text);
-    opacity: 0;
-    animation: fadeUp 0.9s 0.35s forwards;
-    margin-bottom: 0.3rem;
-  }
-
-  .hero-name span {
-    color: var(--gold);
-    display: inline-block;
-  }
-
-  .hero-handle {
-    font-family: 'Space Mono', monospace;
-    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
-    color: var(--muted);
-    letter-spacing: 0.15em;
-    margin-bottom: 2.5rem;
-    opacity: 0;
-    animation: fadeUp 0.9s 0.5s forwards;
-  }
-
-  .hero-tagline {
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-    font-weight: 300;
-    line-height: 1.5;
-    color: var(--muted);
-    max-width: 520px;
-    opacity: 0;
-    animation: fadeUp 0.9s 0.65s forwards;
-    margin-bottom: 3rem;
-  }
-  .hero-tagline em {
-    color: var(--text);
-    font-style: italic;
-  }
-
-  .hero-cta {
-    display: flex;
-    gap: 1.2rem;
-    flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeUp 0.9s 0.8s forwards;
-  }
-
-  .btn {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 0.9rem 2rem;
-    border: 1px solid;
-    transition: all 0.3s;
-    cursor: none;
-    display: inline-block;
-  }
-
-  .btn-primary {
-    background: var(--gold);
-    border-color: var(--gold);
-    color: var(--black);
-  }
-  .btn-primary:hover {
-    background: var(--gold-light);
-    border-color: var(--gold-light);
-    transform: translateY(-2px);
-    box-shadow: 0 12px 40px rgba(201,168,76,0.25);
-  }
-
-  .btn-ghost {
-    background: transparent;
-    border-color: rgba(201,168,76,0.4);
-    color: var(--gold);
-  }
-  .btn-ghost:hover {
-    border-color: var(--gold);
-    background: rgba(201,168,76,0.05);
-    transform: translateY(-2px);
-  }
-
-  /* Floating chess piece */
-  .chess-float {
-    position: absolute;
-    right: 5%;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: clamp(6rem, 15vw, 14rem);
-    opacity: 0.06;
-    filter: blur(1px);
-    animation: float 6s ease-in-out infinite;
-    pointer-events: none;
-    user-select: none;
-  }
-
-  /* SECTION SHARED */
-  section {
-    padding: 6rem 3rem;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .section-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to right, rgba(29,233,182,0.3), transparent);
-    max-width: 80px;
-  }
-
-  .section-title {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 300;
-    font-style: italic;
-    line-height: 1.1;
-    margin-bottom: 1rem;
-  }
-
-  /* ABOUT */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: start;
-    margin-top: 3rem;
-  }
-
-  .about-text p {
-    font-size: 1.15rem;
-    font-weight: 300;
-    line-height: 1.8;
-    color: var(--muted);
-    margin-bottom: 1.2rem;
-  }
-  .about-text p strong {
-    color: var(--text);
-    font-weight: 400;
-  }
-
-  .about-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-
-  .stat-box {
-    border: 1px solid rgba(201,168,76,0.15);
-    padding: 1.5rem;
-    background: rgba(201,168,76,0.02);
-    transition: border-color 0.3s, background 0.3s;
-  }
-  .stat-box:hover {
-    border-color: rgba(201,168,76,0.4);
-    background: rgba(201,168,76,0.05);
-  }
-
-  .stat-num {
-    font-size: 2.5rem;
-    font-weight: 300;
-    font-style: italic;
-    color: var(--gold);
-    line-height: 1;
-    margin-bottom: 0.4rem;
-  }
-
-  .stat-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  /* SERVICES */
-  .services-section {
-    max-width: 1100px;
-    padding: 6rem 3rem;
-    margin: 0 auto;
-  }
-
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1px;
-    margin-top: 3rem;
-    border: 1px solid rgba(201,168,76,0.1);
-    background: rgba(201,168,76,0.1);
-  }
-
-  .service-card {
-    background: var(--black);
-    padding: 2.5rem 2rem;
-    transition: background 0.3s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .service-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 2px;
-    height: 0;
-    background: var(--gold);
-    transition: height 0.4s ease;
-  }
-  .service-card:hover::before { height: 100%; }
-  .service-card:hover { background: rgba(201,168,76,0.03); }
-
-  .service-icon {
-    font-size: 1.5rem;
-    margin-bottom: 1.2rem;
-    display: block;
-  }
-
-  .service-title {
-    font-size: 1.3rem;
-    font-style: italic;
-    font-weight: 400;
-    color: var(--text);
-    margin-bottom: 0.8rem;
-  }
-
-  .service-desc {
-    font-size: 0.95rem;
-    font-weight: 300;
-    line-height: 1.7;
-    color: var(--muted);
-  }
-
-  .service-tag {
-    margin-top: 1.5rem;
-    display: inline-block;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--teal);
-    border: 1px solid rgba(29,233,182,0.2);
-    padding: 0.3rem 0.7rem;
-  }
-
-  /* PHILOSOPHY / PILLARS */
-  .pillars-section {
-    max-width: 1100px;
-    padding: 6rem 3rem;
-    margin: 0 auto;
-  }
-
-  .pillars-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-    margin-top: 3rem;
-  }
-
-  .pillar {
-    padding: 2rem;
-    border-bottom: 1px solid rgba(201,168,76,0.15);
-    display: flex;
-    gap: 1.5rem;
-    align-items: flex-start;
-  }
-
-  .pillar-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--gold-dim);
-    letter-spacing: 0.1em;
-    margin-top: 0.2rem;
-    flex-shrink: 0;
-  }
-
-  .pillar-title {
-    font-size: 1.2rem;
-    font-style: italic;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-  }
-
-  .pillar-text {
-    font-size: 0.95rem;
-    font-weight: 300;
-    line-height: 1.7;
-    color: var(--muted);
-  }
-
-  /* CTA STRIP */
-  .cta-strip {
-    margin: 2rem 3rem 6rem;
-    padding: 3.5rem 4rem;
-    background: linear-gradient(135deg, rgba(74,47,122,0.3) 0%, rgba(10,8,15,0.8) 60%);
-    border: 1px solid rgba(201,168,76,0.2);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 2rem;
-    flex-wrap: wrap;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .cta-strip::before {
-    content: '♟︎';
-    position: absolute;
-    right: 3rem;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 8rem;
-    opacity: 0.04;
-    pointer-events: none;
-  }
-
-  .cta-left h2 {
-    font-size: clamp(1.5rem, 3vw, 2.5rem);
-    font-style: italic;
-    font-weight: 300;
-    line-height: 1.2;
-    margin-bottom: 0.5rem;
-  }
-  .cta-left p {
-    color: var(--muted);
-    font-size: 1rem;
-    font-weight: 300;
-  }
-
-  /* SOCIALS */
-  .socials-section {
-    max-width: 1100px;
-    padding: 0 3rem 6rem;
-    margin: 0 auto;
-  }
-
-  .socials-row {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-top: 2rem;
-  }
-
-  .social-link {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--muted);
-    text-decoration: none;
-    padding: 0.8rem 1.5rem;
-    border: 1px solid rgba(138,127,160,0.2);
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    cursor: none;
-  }
-  .social-link:hover {
-    color: var(--gold);
-    border-color: rgba(201,168,76,0.4);
-    background: rgba(201,168,76,0.03);
-  }
-
-  /* FOOTER */
-  footer {
-    border-top: 1px solid rgba(201,168,76,0.1);
-    padding: 2rem 3rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  footer p {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.15em;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
-
-  .faith-mark {
-    font-size: 1rem;
-    color: var(--gold-dim);
-  }
-
-  /* DIVIDER */
-  .divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(to right, transparent, rgba(201,168,76,0.15), transparent);
-    margin: 0 auto;
-  }
-
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  @keyframes float {
-    0%, 100% { transform: translateY(-50%) rotate(0deg); }
-    50% { transform: translateY(-53%) rotate(3deg); }
-  }
-
-  .reveal {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .reveal.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* THREADS */
-  .threads-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-    margin-top: 2.5rem;
-    background: rgba(201,168,76,0.1);
-  }
-
-  .thread-card {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-    padding: 1.4rem 2rem;
-    background: var(--black);
-    text-decoration: none;
-    transition: background 0.3s;
-    cursor: none;
-  }
-  .thread-card:hover {
-    background: rgba(201,168,76,0.04);
-  }
-  .thread-card:hover .thread-arrow {
-    color: var(--gold);
-    transform: translate(3px, -3px);
-  }
-
-  .thread-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--gold-dim);
-    letter-spacing: 0.1em;
-    flex-shrink: 0;
-    width: 24px;
-  }
-
-  .thread-body {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    flex-wrap: wrap;
-  }
-
-  .thread-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--teal);
-    border: 1px solid rgba(29,233,182,0.2);
-    padding: 0.25rem 0.6rem;
-    flex-shrink: 0;
-  }
-
-  .thread-link {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-  }
-
-  .thread-arrow {
-    font-size: 1.2rem;
-    color: var(--gold-dim);
-    transition: color 0.3s, transform 0.3s;
-    flex-shrink: 0;
-  }
-
-  /* RESPONSIVE */
-  @media (max-width: 768px) {
-    nav { padding: 1.2rem 1.5rem; }
-    nav .nav-links { display: none; }
-    section, .services-section, .pillars-section, .socials-section { padding: 4rem 1.5rem; }
-    .hero { padding: 7rem 1.5rem 3rem; }
-    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-    .services-grid { grid-template-columns: 1fr; }
-    .pillars-grid { grid-template-columns: 1fr; }
-    .cta-strip { margin: 1rem 1.5rem 4rem; padding: 2.5rem 2rem; }
-    footer { padding: 1.5rem; }
-    .chess-float { display: none; }
-  }
+:root {
+  --bg: #080808;
+  --surface: #0f0f0f;
+  --surface2: #161616;
+  --border: rgba(255,255,255,0.07);
+  --border-gold: rgba(212,175,55,0.25);
+  --gold: #D4AF37;
+  --gold-soft: rgba(212,175,55,0.12);
+  --gold-mid: rgba(212,175,55,0.5);
+  --white: #F5F5F0;
+  --muted: #6B6B6B;
+  --muted2: #9A9A9A;
+  --accent: #C8F0E8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* CURSOR */
+.cur { position: fixed; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .2s, height .2s; }
+.cur-ring { position: fixed; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(212,175,55,0.4); pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width .15s, height .15s; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.25rem 2.5rem;
+  background: rgba(8,8,8,0.94);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.click-me {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.45rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--gold);
+  padding: 0.15rem 0.45rem;
+  border-radius: 2px;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  animation: pulse-badge 1.2s ease-in-out infinite;
+  cursor: none;
+}
+@keyframes pulse-badge {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.08); }
+}
+
+.nav-logo { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--white); text-decoration: none; letter-spacing: -0.01em; }
+.nav-logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 2rem; list-style: none; }
+.nav-links a { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color .25s; }
+.nav-links a:hover { color: var(--white); }
+
+/* TICKER */
+.ticker { overflow: hidden; background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 0.55rem 0; white-space: nowrap; }
+.ticker.t2 { background: rgba(200,240,232,0.02); border-color: rgba(200,240,232,0.07); }
+.ticker-track { display: inline-flex; animation: tick 30s linear infinite; }
+.ticker.t2 .ticker-track { animation: tick-r 36s linear infinite; }
+.ticker-item { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); padding: 0 2rem; }
+.ticker.t2 .ticker-item { color: var(--accent); opacity: 0.6; }
+.tsep { opacity: 0.3; margin: 0 0.3rem; }
+@keyframes tick { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+@keyframes tick-r { from { transform: translateX(-50%) } to { transform: translateX(0) } }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: center;
+  padding: 8rem 2.5rem 5rem;
+  position: relative; overflow: hidden;
+}
+.hero-glow { position: absolute; top: -20%; right: -10%; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(212,175,55,0.055) 0%, transparent 65%); pointer-events: none; }
+.hero-glow2 { position: absolute; bottom: 0; left: -15%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(200,240,232,0.035) 0%, transparent 70%); pointer-events: none; }
+.hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; position: relative; z-index: 2; }
+.hero-tag { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); opacity: 0; animation: up .7s .1s forwards; display: inline-flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem; }
+.hero-tag::before { content: ''; width: 28px; height: 1px; background: var(--gold); }
+.hero-h1 { font-family: 'Syne', sans-serif; font-size: clamp(3.5rem, 9vw, 7.5rem); font-weight: 800; line-height: 0.95; letter-spacing: -0.03em; color: var(--white); opacity: 0; animation: up .8s .25s forwards; margin-bottom: 0.2rem; }
+.hero-h1 .g { color: var(--gold); }
+.hero-sub { font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 2rem; opacity: 0; animation: up .8s .4s forwards; }
+.hero-desc { font-size: 1.05rem; font-weight: 300; line-height: 1.75; color: var(--muted2); max-width: 480px; margin-bottom: 2.5rem; opacity: 0; animation: up .8s .55s forwards; }
+.hero-desc strong { color: var(--white); font-weight: 500; }
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; opacity: 0; animation: up .8s .7s forwards; }
+.btn { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; padding: 0.85rem 1.75rem; border: 1px solid; transition: all .25s; cursor: none; display: inline-block; }
+.btn-g { background: var(--gold); border-color: var(--gold); color: #080808; font-weight: 500; }
+.btn-g:hover { background: #e8c840; border-color: #e8c840; transform: translateY(-2px); }
+.btn-o { background: transparent; border-color: var(--border); color: var(--muted2); }
+.btn-o:hover { border-color: rgba(255,255,255,0.2); color: var(--white); transform: translateY(-2px); }
+.hero-chess { position: absolute; right: 3%; top: 50%; transform: translateY(-50%); font-size: clamp(8rem, 18vw, 18rem); opacity: 0.025; pointer-events: none; user-select: none; font-family: serif; }
+
+/* SHARED SECTION */
+.s { max-width: 1100px; margin: 0 auto; padding: 7rem 2.5rem; }
+.s-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
+.s-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; color: var(--white); margin-bottom: 3.5rem; }
+.s-title span { color: var(--muted); }
+hr.div { border: none; border-top: 1px solid var(--border); margin: 0 2.5rem; }
+
+/* ABOUT */
+.about-wrap { display: grid; grid-template-columns: 1.2fr 1fr; gap: 5rem; align-items: start; }
+.about-body p { font-size: 1rem; font-weight: 300; line-height: 1.85; color: var(--muted2); margin-bottom: 1.1rem; }
+.about-body p strong { color: var(--white); font-weight: 500; }
+.about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+.stat { background: var(--surface); padding: 1.75rem; transition: background .25s; }
+.stat:hover { background: var(--surface2); }
+.stat-n { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 700; color: var(--gold); line-height: 1; margin-bottom: 0.4rem; }
+.stat-l { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+
+/* FLIP CARDS */
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
+.flip { height: 200px; perspective: 1000px; cursor: none; }
+.flip-in { position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform .55s cubic-bezier(.4,0,.2,1); }
+.flip.on .flip-in, .flip:hover .flip-in { transform: rotateY(180deg); }
+.ff, .fb { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 1.5rem; background: var(--surface); }
+.fb { background: var(--surface2); transform: rotateY(180deg); border: 1px solid var(--border-gold); }
+.ff-icon { font-size: 1.6rem; margin-bottom: 0.75rem; }
+.ff-label { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted2); }
+.ff-hint { font-family: 'DM Mono', monospace; font-size: 0.48rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-top: 0.4rem; opacity: 0.5; }
+.fb-title { font-family: 'Syne', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem; line-height: 1.2; }
+.fb-desc { font-size: 0.78rem; font-weight: 300; color: var(--muted2); line-height: 1.6; }
+.fb-tag { font-family: 'DM Mono', monospace; font-size: 0.48rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); border: 1px solid rgba(200,240,232,0.2); padding: 0.2rem 0.6rem; margin-top: 0.6rem; opacity: 0.7; }
+
+/* SERVICES */
+.services-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
+.svc { background: var(--surface); padding: 1.75rem 2rem; display: grid; grid-template-columns: 36px 1fr 1.2fr auto; gap: 2rem; align-items: center; transition: background .25s; }
+.svc:hover { background: var(--surface2); }
+.svc-num { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em; color: var(--muted); }
+.svc-name { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 600; color: var(--white); }
+.svc-desc { font-size: 0.85rem; font-weight: 300; color: var(--muted2); line-height: 1.5; }
+.svc-tag { font-family: 'DM Mono', monospace; font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--border-gold); padding: 0.28rem 0.7rem; white-space: nowrap; }
+
+/* PROOF OF WORK */
+.pow-list { display: flex; flex-direction: column; gap: 1px; background: var(--border); }
+.pow-item { background: var(--surface); display: flex; align-items: center; gap: 1.5rem; padding: 1.2rem 2rem; text-decoration: none; transition: background .25s; }
+.pow-item:hover { background: var(--surface2); }
+.pow-item:hover .pow-arrow { color: var(--gold); transform: translate(3px,-3px); }
+.pow-n { font-family: 'DM Mono', monospace; font-size: 0.55rem; color: var(--muted); width: 20px; flex-shrink: 0; }
+.pow-badge { font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.2rem 0.6rem; border: 1px solid; flex-shrink: 0; }
+.pow-badge.thread { color: var(--accent); border-color: rgba(200,240,232,0.2); }
+.pow-badge.design { color: var(--gold); border-color: var(--border-gold); }
+.pow-url { font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--muted2); flex: 1; }
+.pow-arrow { color: var(--muted); font-size: 1rem; flex-shrink: 0; transition: color .25s, transform .25s; }
+
+/* PILLARS */
+.pillars-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
+.pillar { background: var(--surface); padding: 2.5rem; transition: background .25s; }
+.pillar:hover { background: var(--surface2); }
+.p-num { font-family: 'DM Mono', monospace; font-size: 0.55rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 1rem; }
+.p-title { font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--white); margin-bottom: 0.75rem; letter-spacing: -0.01em; }
+.p-text { font-size: 0.88rem; font-weight: 300; color: var(--muted2); line-height: 1.75; }
+
+/* CTA */
+.cta-block { margin: 0 2.5rem 5rem; padding: 4rem; background: var(--surface); border: 1px solid var(--border-gold); display: flex; justify-content: space-between; align-items: center; gap: 2rem; flex-wrap: wrap; }
+.cta-title { font-family: 'Syne', sans-serif; font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: -0.02em; color: var(--white); margin-bottom: 0.4rem; }
+.cta-sub { font-size: 0.9rem; font-weight: 300; color: var(--muted2); }
+
+/* CONNECT */
+.connect-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); }
+.connect-card { background: var(--surface); padding: 2rem; text-decoration: none; display: flex; flex-direction: column; gap: 0.5rem; transition: background .25s; cursor: none; }
+.connect-card:hover { background: var(--surface2); }
+.connect-platform { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+.connect-handle { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 600; color: var(--white); transition: color .25s; }
+.connect-card:hover .connect-handle { color: var(--gold); }
+.connect-arrow { font-size: 1rem; color: var(--muted); margin-top: auto; padding-top: 1.2rem; transition: color .25s, transform .25s; }
+.connect-card:hover .connect-arrow { color: var(--gold); transform: translate(3px,-3px); }
+
+/* FOOTER */
+footer { border-top: 1px solid var(--border); padding: 1.75rem 2.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; }
+.faith { font-size: 0.9rem; color: rgba(212,175,55,0.35); }
+
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity .65s ease, transform .65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+.i-wrap { position: relative; display: inline-block; }
+.i-letter { display: inline-block; }
+.ball {
+  position: absolute;
+  top: -0.18em;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0.18em;
+  height: 0.18em;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 8px rgba(212,175,55,0.8), 0 0 20px rgba(212,175,55,0.4);
+  animation: bounce 0.7s cubic-bezier(.33,0,.66,1) infinite alternate;
+}
+@keyframes bounce {
+  0%   { top: -0.18em; transform: translateX(-50%) scaleX(1) scaleY(1); }
+  85%  { transform: translateX(-50%) scaleX(1) scaleY(1); }
+  100% { top: 0.05em; transform: translateX(-50%) scaleX(1.4) scaleY(0.6); }
+}
+
+@keyframes up { from { opacity:0; transform:translateY(18px) } to { opacity:1; transform:translateY(0) } }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  .nav-links { display: none; }
+  .s { padding: 5rem 1.5rem; }
+  hr.div { margin: 0 1.5rem; }
+  .about-wrap { grid-template-columns: 1fr; gap: 3rem; }
+  .grid-4 { grid-template-columns: repeat(2,1fr); }
+  .svc { grid-template-columns: 36px 1fr auto; }
+  .svc-desc { display: none; }
+  .pillars-grid { grid-template-columns: 1fr; }
+  .connect-grid { grid-template-columns: repeat(2,1fr); }
+  .cta-block { margin: 0 1.5rem 4rem; padding: 2.5rem; }
+  .hero { padding: 7rem 1.5rem 4rem; }
+  .hero-chess { display: none; }
+}
+@media (max-width: 500px) {
+  .grid-4 { grid-template-columns: repeat(2,1fr); }
+  .connect-grid { grid-template-columns: 1fr 1fr; }
+  .svc { grid-template-columns: 36px 1fr; }
+  .svc-tag { display: none; }
+}
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<div class="cur" id="cur"></div>
+<div class="cur-ring" id="curR"></div>
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">𝒌𝒐𝒔𝒊 ♟︎</a>
+  <a href="#" class="nav-logo" id="navLogo">kosi <span>♟︎</span></a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
     <li><a href="#services">Services</a></li>
+    <li><a href="#work">Work</a></li>
     <li><a href="#philosophy">Philosophy</a></li>
-    <li><a href="#connect">Connect</a></li>
+    <li><a href="#connect">Contact</a></li>
   </ul>
+  <span class="click-me" id="clickMe" onclick="foolYa()">click me</span>
 </nav>
+
+<!-- TOP TICKER -->
+<div class="ticker" style="margin-top:57px;">
+  <div class="ticker-track">
+    <span class="ticker-item">Writer <span class="tsep">♟</span></span><span class="ticker-item">Clipper <span class="tsep">♟</span></span><span class="ticker-item">Motion Designer <span class="tsep">♟</span></span><span class="ticker-item">Graphics Designer <span class="tsep">♟</span></span><span class="ticker-item">AI Prompt Engineer <span class="tsep">♟</span></span><span class="ticker-item">Community Manager <span class="tsep">♟</span></span><span class="ticker-item">Moderator <span class="tsep">♟</span></span><span class="ticker-item">Business Developer <span class="tsep">♟</span></span><span class="ticker-item">Project Manager <span class="tsep">♟</span></span><span class="ticker-item">Growth Specialist <span class="tsep">♟</span></span><span class="ticker-item">Onchain Strategist <span class="tsep">♟</span></span><span class="ticker-item">Storyteller <span class="tsep">♟</span></span><span class="ticker-item">Writer <span class="tsep">♟</span></span><span class="ticker-item">Clipper <span class="tsep">♟</span></span><span class="ticker-item">Motion Designer <span class="tsep">♟</span></span><span class="ticker-item">Graphics Designer <span class="tsep">♟</span></span><span class="ticker-item">AI Prompt Engineer <span class="tsep">♟</span></span><span class="ticker-item">Community Manager <span class="tsep">♟</span></span><span class="ticker-item">Moderator <span class="tsep">♟</span></span><span class="ticker-item">Business Developer <span class="tsep">♟</span></span><span class="ticker-item">Project Manager <span class="tsep">♟</span></span><span class="ticker-item">Growth Specialist <span class="tsep">♟</span></span><span class="ticker-item">Onchain Strategist <span class="tsep">♟</span></span><span class="ticker-item">Storyteller <span class="tsep">♟</span></span>
+  </div>
+</div>
 
 <!-- HERO -->
 <div class="hero">
-  <div class="hero-bg"></div>
-  <div class="chess-float">♟</div>
-  <div class="hero-content">
-    <p class="hero-eyebrow">𓆩 Son of God 𓆪 · Content & Creative Hub</p>
-    <h1 class="hero-name">𝒌𝒐𝒔𝒊<span>&nbsp;♟︎</span></h1>
-    <p class="hero-handle">@onchain_fiend · x.com/onchain_fiend</p>
-    <p class="hero-tagline">
-      Faith-rooted creator & strategist — <em>writer, clipper, motion designer, graphics designer & AI prompt engineer</em> — operating at the intersection of onchain technology, storytelling, and real economic design.
-    </p>
-    <div class="hero-cta">
-      <a href="#services" class="btn btn-primary">Work With Me</a>
-      <a href="#about" class="btn btn-ghost">Explore My World</a>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-chess">♟</div>
+  <div class="hero-inner">
+    <p class="hero-tag">𓆩 Son of God 𓆪 · Content & Creative Hub</p>
+    <h1 class="hero-h1">kos<span class="i-wrap"><span class="i-letter">ı</span><span class="ball"></span></span><span class="g">&nbsp;♟︎</span></h1>
+    <p class="hero-sub">@onchain_fiend · x.com/onchain_fiend</p>
+    <p class="hero-desc">Faith-rooted creator & strategist operating at the intersection of <strong>onchain technology, storytelling</strong> and real economic design. I don't chase hype — I design clarity.</p>
+    <div class="hero-btns">
+      <a href="#services" class="btn btn-g">Work With Me</a>
+      <a href="#about" class="btn btn-o">Learn More</a>
     </div>
   </div>
 </div>
 
-<div class="divider"></div>
+<hr class="div">
 
 <!-- ABOUT -->
-<section id="about">
-  <div class="section-label">About</div>
-  <h2 class="section-title reveal">The Missing Link<br>Between Narrative & Chain</h2>
-
-  <div class="about-grid reveal">
-    <div class="about-text">
-      <p>I don't chase hype. <strong>I design clarity.</strong> My goal is to show how ownership, incentives, and culture can be structurally linked onchain.</p>
-      <p>I create long-form educational content that breaks down complex onchain mechanics in <strong>clear, visionary language</strong> — threads that read like mini strategy decks, visuals that make abstract concepts instantly understandable.</p>
-      <p>Multi-time thread contest winner. Growth specialist. At every level, I bridge human narrative with decentralized systems.</p>
+<div class="s" id="about">
+  <div class="s-label">About</div>
+  <h2 class="s-title reveal">The Missing Link<br><span>Between Narrative & Chain</span></h2>
+  <div class="about-wrap reveal">
+    <div class="about-body">
+      <p>I'm a <strong>multi-time thread contest winner</strong> and faith-rooted creator building at the intersection of onchain technology, storytelling, and real economic design.</p>
+      <p>Everything I create is built to bridge human narrative with decentralized systems — long-form threads that read like strategy decks, visuals that make the abstract instantly clear, and growth frameworks that actually stick.</p>
+      <p>My goal is always to show how <strong>ownership, incentives, and culture</strong> can be structurally linked onchain.</p>
     </div>
     <div class="about-stats">
-      <div class="stat-box">
-        <div class="stat-num">∞</div>
-        <div class="stat-label">Threads Created</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num" style="font-size:1.6rem;">Multi</div>
-        <div class="stat-label">Contest Wins</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num">01</div>
-        <div class="stat-label">Onchain Narrative</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num">∴</div>
-        <div class="stat-label">Faith First</div>
-      </div>
+      <div class="stat"><div class="stat-n">∞</div><div class="stat-l">Threads Created</div></div>
+      <div class="stat"><div class="stat-n">Multi</div><div class="stat-l">Contest Wins</div></div>
+      <div class="stat"><div class="stat-n">01</div><div class="stat-l">Onchain Narrative</div></div>
+      <div class="stat"><div class="stat-n">∴</div><div class="stat-l">Faith First</div></div>
     </div>
   </div>
-</section>
+</div>
 
-<div class="divider"></div>
+<hr class="div">
+
+<!-- SKILLS FLIP CARDS -->
+<div class="s" id="skills">
+  <div class="s-label">Skills</div>
+  <h2 class="s-title reveal">Tap Any Card<br><span>to Reveal</span></h2>
+  <div class="grid-4 reveal">
+    <div class="flip" onclick="this.classList.toggle('on')"><div class="flip-in"><div class="ff"><span class="ff-icon">✍️</span><span class="ff-label">Writing</span><span class="ff-hint">tap to reveal</span></div><div class="fb"><div class="fb-title">Writing & Threads</div><p class="fb-desc">Long-form threads that read like strategy decks. Educational content bridging onchain mechanics with clear language.</p><span class="fb-tag">Available</span></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('on')"><div class="flip-in"><div class="ff"><span class="ff-icon">🎬</span><span class="ff-label">Clipping</span><span class="ff-hint">tap to reveal</span></div><div class="fb"><div class="fb-title">Video Clipping</div><p class="fb-desc">Turning raw footage into shareable high-impact clips. Cut for retention, emotion, and virality.</p><span class="fb-tag">Available</span></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('on')"><div class="flip-in"><div class="ff"><span class="ff-icon">🎨</span><span class="ff-label">Design</span><span class="ff-hint">tap to reveal</span></div><div class="fb"><div class="fb-title">Graphics & Motion</div><p class="fb-desc">Custom visuals, infographics and motion graphics that make abstract concepts instantly understandable.</p><span class="fb-tag">Available</span></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('on')"><div class="flip-in"><div class="ff"><span class="ff-icon">🤖</span><span class="ff-label">AI Prompts</span><span class="ff-hint">tap to reveal</span></div><div class="fb"><div class="fb-title">AI Prompt Engineering</div><p class="fb-desc">Crafting powerful prompts that unlock real creative and operational leverage for creators and projects.</p><span class="fb-tag">Available</span></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('on')"><div class="flip-in"><div class="ff"><span class="ff-icon">🛡️</span><span class="ff-label">Community</span><span class="ff-hint">tap to reveal</span></div><div class="fb"><div class="fb-title">Community Manager & Mod</div><p class="fb-desc">Managing and moderating communities with intention across Discord, Telegram, and X.</p><span class="fb-tag">Available</span></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('on')"><div class="flip-in"><div class="ff"><span class="ff-icon">📈</span><span class="ff-label">Growth</span><span class="ff-hint">tap to reveal</span></div><div class="fb"><div class="fb-title">Growth Specialist</div><p class="fb-desc">Building sustainable participation loops and storytelling frameworks that drive real onchain growth.</p><span class="fb-tag">Available</span></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('on')"><div class="flip-in"><div class="ff"><span class="ff-icon">🤝</span><span class="ff-label">Biz Dev</span><span class="ff-hint">tap to reveal</span></div><div class="fb"><div class="fb-title">Business Development</div><p class="fb-desc">Forging partnerships, identifying opportunities, and connecting teams, products, and communities onchain.</p><span class="fb-tag">Available</span></div></div></div>
+    <div class="flip" onclick="this.classList.toggle('on')"><div class="flip-in"><div class="ff"><span class="ff-icon">📋</span><span class="ff-label">PM</span><span class="ff-hint">tap to reveal</span></div><div class="fb"><div class="fb-title">Project Management</div><p class="fb-desc">Coordinating timelines, teams, and deliverables from ideation to execution — structured and clear.</p><span class="fb-tag">Available</span></div></div></div>
+  </div>
+</div>
+
+<hr class="div">
 
 <!-- SERVICES -->
-<div class="services-section" id="services">
-  <div class="section-label">Services</div>
-  <h2 class="section-title reveal">What I Bring<br>to the Table</h2>
-
-  <div class="services-grid reveal">
-    <div class="service-card">
-      <span class="service-icon">✍️</span>
-      <h3 class="service-title">Content & Writing</h3>
-      <p class="service-desc">Deep-dive threads on metaverse economics, coordination layers, and narrative resilience. Long-form content that reads like strategy — clean, intentional, value-first.</p>
-      <span class="service-tag">Available</span>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">⚡</span>
-      <h3 class="service-title">Motion, Design & Clipping</h3>
-      <p class="service-desc">Custom visuals, motion graphics, infographics, and video clipping. I clip, cut, and craft content that hits — turning raw footage into shareable moments that travel.</p>
-      <span class="service-tag">Available</span>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🤖</span>
-      <h3 class="service-title">AI Prompt Engineering</h3>
-      <p class="service-desc">Crafting powerful prompts for creators and projects. I engineer prompts that unlock real creative and operational leverage — offered openly as a service.</p>
-      <span class="service-tag">Available</span>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">📈</span>
-      <h3 class="service-title">Growth Consulting</h3>
-      <p class="service-desc">Business development for onchain projects — building sustainable participation loops, storytelling frameworks, and community engagement strategies.</p>
-      <span class="service-tag">Available</span>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🔗</span>
-      <h3 class="service-title">Onchain Strategy</h3>
-      <p class="service-desc">Helping projects link ownership, incentives, and culture structurally onchain. I map out how finance + social can merge into real coordinated systems.</p>
-      <span class="service-tag">Available</span>
-    </div>
-    <div class="service-card">
-      <span class="service-icon">🫂</span>
-      <h3 class="service-title">Community Building</h3>
-      <p class="service-desc">Starting conversations, amplifying aligned builders, engaging thoughtfully. I show up consistently and build network density — not just followers.</p>
-      <span class="service-tag">Available</span>
-    </div>
+<div class="s" id="services">
+  <div class="s-label">Services</div>
+  <h2 class="s-title reveal">What I Offer</h2>
+  <div class="services-list reveal">
+    <div class="svc"><span class="svc-num">01</span><span class="svc-name">Content & Writing</span><span class="svc-desc">Deep-dive threads, long-form strategy content, educational onchain breakdowns.</span><span class="svc-tag">Available</span></div>
+    <div class="svc"><span class="svc-num">02</span><span class="svc-name">Motion & Graphics Design</span><span class="svc-desc">Visuals and motion graphics that make complex ideas instantly clear.</span><span class="svc-tag">Available</span></div>
+    <div class="svc"><span class="svc-num">03</span><span class="svc-name">Video Clipping</span><span class="svc-desc">Cutting raw footage into high-retention, shareable clips optimised for social.</span><span class="svc-tag">Available</span></div>
+    <div class="svc"><span class="svc-num">04</span><span class="svc-name">AI Prompt Engineering</span><span class="svc-desc">Powerful custom prompts for creators and projects — offered as a direct service.</span><span class="svc-tag">Available</span></div>
+    <div class="svc"><span class="svc-num">05</span><span class="svc-name">Community Management & Moderation</span><span class="svc-desc">Running communities across Discord, Telegram, and X with culture and intention.</span><span class="svc-tag">Available</span></div>
+    <div class="svc"><span class="svc-num">06</span><span class="svc-name">Business Development</span><span class="svc-desc">Partnerships, growth pipelines, and connecting products with the right communities.</span><span class="svc-tag">Available</span></div>
+    <div class="svc"><span class="svc-num">07</span><span class="svc-name">Project Management</span><span class="svc-desc">End-to-end coordination from ideation to delivery — structured and accountability-driven.</span><span class="svc-tag">Available</span></div>
+    <div class="svc"><span class="svc-num">08</span><span class="svc-name">Onchain Growth Strategy</span><span class="svc-desc">Sustainable participation loops and storytelling frameworks for onchain projects.</span><span class="svc-tag">Available</span></div>
   </div>
 </div>
 
-<div class="divider"></div>
-
-<!-- PHILOSOPHY -->
-<div class="pillars-section" id="philosophy">
-  <div class="section-label">Philosophy</div>
-  <h2 class="section-title reveal">The Pillars<br>I Build On</h2>
-
-  <div class="pillars-grid reveal">
-    <div class="pillar">
-      <span class="pillar-num">01</span>
-      <div>
-        <h3 class="pillar-title">Economic Immersion over Speculation</h3>
-        <p class="pillar-text">Real participation loops matter more than price. I help projects and audiences understand how to be inside the system — not just watching it.</p>
-      </div>
-    </div>
-    <div class="pillar">
-      <span class="pillar-num">02</span>
-      <div>
-        <h3 class="pillar-title">Narrative Resilience</h3>
-        <p class="pillar-text">Stories that survive bear markets. In volatile markets, narrative is the only durable asset. I help build that foundation into projects and content from day one.</p>
-      </div>
-    </div>
-    <div class="pillar">
-      <span class="pillar-num">03</span>
-      <div>
-        <h3 class="pillar-title">Metaverse as Coordination Layer</h3>
-        <p class="pillar-text">Not pixels. Not hype. A genuine place where ownership, community, and culture converge into something structurally significant.</p>
-      </div>
-    </div>
-    <div class="pillar">
-      <span class="pillar-num">04</span>
-      <div>
-        <h3 class="pillar-title">Faith as Foundation</h3>
-        <p class="pillar-text">Everything is rooted in something higher. 𓆩 Son of God 𓆪 — this isn't branding. It's the lens through which strategy, creativity, and service are built.</p>
-      </div>
-    </div>
-  </div>
-</div>
+<hr class="div">
 
 <!-- PROOF OF WORK -->
-<div class="pillars-section" id="work">
-  <div class="section-label">Proof of Work</div>
-  <h2 class="section-title reveal">Featured<br>Threads</h2>
-
-  <div class="threads-grid reveal">
-    <a href="https://x.com/i/status/1917185357277442507" target="_blank" class="thread-card">
-      <span class="thread-num">01</span>
-      <div class="thread-body">
-        <span class="thread-label">Thread</span>
-        <p class="thread-link">x.com/i/status/1917185357277442507</p>
-      </div>
-      <span class="thread-arrow">↗</span>
-    </a>
-    <a href="https://x.com/i/status/1921557793816887580" target="_blank" class="thread-card">
-      <span class="thread-num">02</span>
-      <div class="thread-body">
-        <span class="thread-label">Thread</span>
-        <p class="thread-link">x.com/i/status/1921557793816887580</p>
-      </div>
-      <span class="thread-arrow">↗</span>
-    </a>
-    <a href="https://x.com/i/status/1884243539070181489" target="_blank" class="thread-card">
-      <span class="thread-num">03</span>
-      <div class="thread-body">
-        <span class="thread-label">Thread</span>
-        <p class="thread-link">x.com/i/status/1884243539070181489</p>
-      </div>
-      <span class="thread-arrow">↗</span>
-    </a>
-    <a href="https://x.com/i/status/1903866651126513905" target="_blank" class="thread-card">
-      <span class="thread-num">04</span>
-      <div class="thread-body">
-        <span class="thread-label">Thread</span>
-        <p class="thread-link">x.com/i/status/1903866651126513905</p>
-      </div>
-      <span class="thread-arrow">↗</span>
-    </a>
-    <a href="https://x.com/i/status/1910394332705661336" target="_blank" class="thread-card">
-      <span class="thread-num">05</span>
-      <div class="thread-body">
-        <span class="thread-label">Thread</span>
-        <p class="thread-link">x.com/i/status/1910394332705661336</p>
-      </div>
-      <span class="thread-arrow">↗</span>
-    </a>
-    <a href="https://drive.google.com/drive/folders/1liyCO2DxQuMrhJTo11QissBP1udh1zDh" target="_blank" class="thread-card" style="background: rgba(201,168,76,0.03);">
-      <span class="thread-num">✦</span>
-      <div class="thread-body">
-        <span class="thread-label" style="color:var(--gold); border-color:rgba(201,168,76,0.3);">Design Work</span>
-        <p class="thread-link">drive.google.com · Motion & Graphics Portfolio</p>
-      </div>
-      <span class="thread-arrow">↗</span>
-    </a>
+<div class="s" id="work">
+  <div class="s-label">Proof of Work</div>
+  <h2 class="s-title reveal">Featured Work</h2>
+  <div class="pow-list reveal">
+    <a href="https://x.com/i/status/1917185357277442507" target="_blank" class="pow-item"><span class="pow-n">01</span><span class="pow-badge thread">Thread</span><span class="pow-url">x.com/i/status/1917185357277442507</span><span class="pow-arrow">↗</span></a>
+    <a href="https://x.com/i/status/1921557793816887580" target="_blank" class="pow-item"><span class="pow-n">02</span><span class="pow-badge thread">Thread</span><span class="pow-url">x.com/i/status/1921557793816887580</span><span class="pow-arrow">↗</span></a>
+    <a href="https://x.com/i/status/1884243539070181489" target="_blank" class="pow-item"><span class="pow-n">03</span><span class="pow-badge thread">Thread</span><span class="pow-url">x.com/i/status/1884243539070181489</span><span class="pow-arrow">↗</span></a>
+    <a href="https://x.com/i/status/1903866651126513905" target="_blank" class="pow-item"><span class="pow-n">04</span><span class="pow-badge thread">Thread</span><span class="pow-url">x.com/i/status/1903866651126513905</span><span class="pow-arrow">↗</span></a>
+    <a href="https://x.com/i/status/1910394332705661336" target="_blank" class="pow-item"><span class="pow-n">05</span><span class="pow-badge thread">Thread</span><span class="pow-url">x.com/i/status/1910394332705661336</span><span class="pow-arrow">↗</span></a>
+    <a href="https://drive.google.com/drive/folders/1liyCO2DxQuMrhJTo11QissBP1udh1zDh" target="_blank" class="pow-item"><span class="pow-n">✦</span><span class="pow-badge design">Design</span><span class="pow-url">drive.google.com · Motion & Graphics Portfolio</span><span class="pow-arrow">↗</span></a>
   </div>
 </div>
 
-<div class="divider"></div>
+<hr class="div">
 
-<!-- CTA STRIP -->
-<div class="cta-strip">
-  <div class="cta-left">
-    <h2>Ready to build something real?</h2>
-    <p>Let's bridge your narrative to the chain.</p>
-  </div>
-  <div class="hero-cta">
-    <a href="https://x.com/onchain_fiend" target="_blank" class="btn btn-primary">DM on X →</a>
+<!-- PHILOSOPHY -->
+<div class="s" id="philosophy">
+  <div class="s-label">Philosophy</div>
+  <h2 class="s-title reveal">The Pillars<br><span>I Build On</span></h2>
+  <div class="pillars-grid reveal">
+    <div class="pillar"><div class="p-num">01</div><div class="p-title">Economic Immersion over Speculation</div><p class="p-text">Real participation loops matter more than price. I help projects and audiences understand how to be inside the system — not just watching it.</p></div>
+    <div class="pillar"><div class="p-num">02</div><div class="p-title">Narrative Resilience</div><p class="p-text">Stories that survive bear markets. In volatile markets, narrative is the only durable asset. I help build that foundation from day one.</p></div>
+    <div class="pillar"><div class="p-num">03</div><div class="p-title">Metaverse as Coordination Layer</div><p class="p-text">Not pixels. Not hype. A genuine place where ownership, community, and culture converge into something structurally significant.</p></div>
+    <div class="pillar"><div class="p-num">04</div><div class="p-title">Faith as Foundation</div><p class="p-text">𓆩 Son of God 𓆪 — this isn't branding. It's the lens through which strategy, creativity, and service are built. Everything flows from here.</p></div>
   </div>
 </div>
 
-<!-- SOCIALS -->
-<div class="socials-section" id="connect">
-  <div class="section-label">Connect</div>
-  <h2 class="section-title reveal">Find Me<br>Onchain & Off</h2>
+<!-- CTA -->
+<div class="cta-block">
+  <div>
+    <div class="cta-title">Ready to build something real?</div>
+    <div class="cta-sub">Let's bridge your narrative to the chain.</div>
+  </div>
+  <a href="https://x.com/onchain_fiend" target="_blank" class="btn btn-g">DM on X →</a>
+</div>
 
-  <div class="socials-row reveal">
-    <a href="https://x.com/onchain_fiend" target="_blank" class="social-link">
-      ✕ &nbsp;@onchain_fiend
-    </a>
-    <a href="https://t.me/onchainfiend" target="_blank" class="social-link">
-      ✈ &nbsp;t.me/onchainfiend
-    </a>
-    <a href="https://discord.com" target="_blank" class="social-link">
-      ◈ &nbsp;@gunslinger_001
-    </a>
-    <a href="https://youtube.com/@kosi-creates" target="_blank" class="social-link">
-      ▶ &nbsp;@kosi-creates
-    </a>
+<!-- CONNECT -->
+<div class="s" id="connect" style="padding-top:0;">
+  <div class="s-label">Connect</div>
+  <h2 class="s-title reveal">Find Me</h2>
+  <div class="connect-grid reveal">
+    <a href="https://x.com/onchain_fiend" target="_blank" class="connect-card"><span class="connect-platform">X / Twitter</span><span class="connect-handle">@onchain_fiend</span><span class="connect-arrow">↗</span></a>
+    <a href="https://t.me/onchainfiend" target="_blank" class="connect-card"><span class="connect-platform">Telegram</span><span class="connect-handle">t.me/onchainfiend</span><span class="connect-arrow">↗</span></a>
+    <a href="https://discord.com" target="_blank" class="connect-card"><span class="connect-platform">Discord</span><span class="connect-handle">@gunslinger_001</span><span class="connect-arrow">↗</span></a>
+    <a href="https://youtube.com/@kosi-creates" target="_blank" class="connect-card"><span class="connect-platform">YouTube</span><span class="connect-handle">@kosi-creates</span><span class="connect-arrow">↗</span></a>
+  </div>
+</div>
+
+<!-- BOTTOM TICKER -->
+<div class="ticker t2">
+  <div class="ticker-track">
+    <span class="ticker-item">𓆩 Son of God 𓆪 <span class="tsep">·</span></span><span class="ticker-item">Onchain Fiend <span class="tsep">·</span></span><span class="ticker-item">Faith First <span class="tsep">·</span></span><span class="ticker-item">Design Clarity <span class="tsep">·</span></span><span class="ticker-item">Narrative Resilience <span class="tsep">·</span></span><span class="ticker-item">Economic Immersion <span class="tsep">·</span></span><span class="ticker-item">Bridge Human + Chain <span class="tsep">·</span></span><span class="ticker-item">Multi-Time Thread Winner <span class="tsep">·</span></span><span class="ticker-item">The Missing Link <span class="tsep">·</span></span><span class="ticker-item">@onchain_fiend <span class="tsep">·</span></span><span class="ticker-item">𓆩 Son of God 𓆪 <span class="tsep">·</span></span><span class="ticker-item">Onchain Fiend <span class="tsep">·</span></span><span class="ticker-item">Faith First <span class="tsep">·</span></span><span class="ticker-item">Design Clarity <span class="tsep">·</span></span><span class="ticker-item">Narrative Resilience <span class="tsep">·</span></span><span class="ticker-item">Economic Immersion <span class="tsep">·</span></span><span class="ticker-item">Bridge Human + Chain <span class="tsep">·</span></span><span class="ticker-item">Multi-Time Thread Winner <span class="tsep">·</span></span><span class="ticker-item">The Missing Link <span class="tsep">·</span></span><span class="ticker-item">@onchain_fiend <span class="tsep">·</span></span>
   </div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2025 𝒌𝒐𝒔𝒊 ♟︎ · @onchain_fiend · All rights reserved</p>
-  <span class="faith-mark">𓆩 𓆪</span>
+  <p>© 2025 kosi ♟︎ · @onchain_fiend</p>
+  <span class="faith">𓆩 𓆪</span>
   <p>Built to bridge narrative & chain</p>
 </footer>
 
 <script>
-  // CURSOR
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx + 'px';
-    cursor.style.top = my + 'px';
-  });
-
-  function animateRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx + 'px';
-    ring.style.top = ry + 'px';
-    requestAnimationFrame(animateRing);
+  function foolYa() {
+    const logo = document.getElementById('navLogo');
+    const badge = document.getElementById('clickMe');
+    logo.childNodes[0].textContent = 'fooled ya 😂 ';
+    badge.textContent = 'gotcha';
+    badge.style.background = '#ff4d4d';
+    badge.style.animation = 'none';
+    setTimeout(() => {
+      logo.childNodes[0].textContent = 'kosi ';
+      badge.textContent = 'click me';
+      badge.style.background = '';
+      badge.style.animation = '';
+    }, 2500);
   }
-  animateRing();
 
-  document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.width = '20px';
-      cursor.style.height = '20px';
-      ring.style.width = '50px';
-      ring.style.height = '50px';
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.width = '12px';
-      cursor.style.height = '12px';
-      ring.style.width = '36px';
-      ring.style.height = '36px';
-    });
+  const cur = document.getElementById('cur');
+  const curR = document.getElementById('curR');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; cur.style.left=mx+'px'; cur.style.top=my+'px'; });
+  (function loop(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; curR.style.left=rx+'px'; curR.style.top=ry+'px'; requestAnimationFrame(loop); })();
+  document.querySelectorAll('a,button,.flip,.svc,.pillar,.connect-card,.stat,.pow-item').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ cur.style.width='14px'; cur.style.height='14px'; curR.style.width='42px'; curR.style.height='42px'; });
+    el.addEventListener('mouseleave',()=>{ cur.style.width='8px'; cur.style.height='8px'; curR.style.width='32px'; curR.style.height='32px'; });
   });
-
-  // SCROLL REVEAL
-  const reveals = document.querySelectorAll('.reveal');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach((e, i) => {
-      if (e.isIntersecting) {
-        setTimeout(() => e.target.classList.add('visible'), i * 80);
-      }
-    });
-  }, { threshold: 0.15 });
-
-  reveals.forEach(el => obs.observe(el));
+  const obs = new IntersectionObserver(es=>es.forEach((e,i)=>{ if(e.isIntersecting) setTimeout(()=>e.target.classList.add('visible'),i*60); }),{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
 </body>
 </html>
