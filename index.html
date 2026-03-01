@@ -24,6 +24,33 @@
   --navy2: #0a1020;
 }
 
+/* LIGHT MODE */
+body.light {
+  --bg: #F5F3EE;
+  --surface: #EDEAE3;
+  --surface2: #E3DFD7;
+  --border: rgba(0,0,0,0.08);
+  --border-gold: rgba(180,140,20,0.3);
+  --gold: #B8960C;
+  --gold-soft: rgba(180,140,20,0.1);
+  --gold-mid: rgba(180,140,20,0.4);
+  --white: #1A1A1A;
+  --muted: #7A7060;
+  --muted2: #5A5040;
+  --accent: #0D6B55;
+}
+
+body.light::after {
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(212,175,55,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 90% 80%, rgba(180,140,20,0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(180,140,20,0.05) 0%, transparent 70%);
+}
+
+body.light::before { opacity: 0.15; }
+
+body, body * { transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 
@@ -72,6 +99,35 @@ body::before {
 .cur { position: fixed; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .2s, height .2s; }
 .cur-ring { position: fixed; width: 32px; height: 32px; border-radius: 50%; border: 1px solid rgba(212,175,55,0.4); pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width .15s, height .15s; }
 
+/* THEME TOGGLE */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.theme-icon { font-size: 0.75rem; user-select: none; }
+.toggle-track {
+  width: 36px; height: 20px;
+  border-radius: 20px;
+  background: rgba(212,175,55,0.2);
+  border: 1px solid var(--border-gold);
+  position: relative;
+  transition: background 0.3s;
+  cursor: pointer;
+}
+body.light .toggle-track { background: rgba(180,140,20,0.25); }
+.toggle-thumb {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--gold);
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+}
+body.light .toggle-thumb { transform: translateX(16px); }
+
 /* NAV */
 nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 500;
@@ -81,6 +137,8 @@ nav {
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
 }
+body.light nav { background: rgba(245,243,238,0.92); }
+.nav-center { position: absolute; left: 50%; transform: translateX(-50%); }
 .click-me {
   font-family: 'DM Mono', monospace;
   font-size: 0.45rem;
@@ -293,7 +351,6 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
 @media (max-width: 960px) {
   nav { padding: 1rem 1.25rem; }
   .nav-links { display: none; }
-  .click-me { display: none; }
   .s { padding: 4rem 1.25rem; }
   hr.div { margin: 0 1.25rem; }
   .hero { padding: 6rem 1.25rem 3.5rem; }
@@ -381,7 +438,13 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
     <li><a href="#philosophy">Philosophy</a></li>
     <li><a href="#connect">Contact</a></li>
   </ul>
-  <span class="click-me" id="clickMe" onclick="foolYa()">click me</span>
+  <div class="nav-center">
+    <span class="click-me" id="clickMe" onclick="foolYa()">click me</span>
+  </div>
+  <div class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode">
+    <span class="theme-icon" id="themeIcon">🌙</span>
+    <div class="toggle-track"><div class="toggle-thumb"></div></div>
+  </div>
 </nav>
 
 <!-- TOP TICKER -->
@@ -557,12 +620,25 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2025 kosi ♟︎ · @onchain_fiend</p>
+  <p>© 2026 kosi ♟︎ · @onchain_fiend</p>
   <span class="faith">𓆩 𓆪</span>
   <p>Built to bridge narrative & chain</p>
 </footer>
 
 <script>
+  function toggleTheme() {
+    document.body.classList.toggle('light');
+    const isLight = document.body.classList.contains('light');
+    document.getElementById('themeIcon').textContent = isLight ? '☀️' : '🌙';
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+  }
+
+  // Load saved theme
+  if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light');
+    document.getElementById('themeIcon').textContent = '☀️';
+  }
+
   function foolYa() {
     const logo = document.getElementById('navLogo');
     const badge = document.getElementById('clickMe');
