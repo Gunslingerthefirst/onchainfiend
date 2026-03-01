@@ -250,6 +250,35 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
 
 @keyframes up { from { opacity:0; transform:translateY(18px) } to { opacity:1; transform:translateY(0) } }
 
+/* GAME */
+.game-wrap {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 2.5rem 2rem;
+  border-top: 1px solid var(--border);
+}
+.game-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 1.2rem;
+}
+#gameCanvas {
+  width: 100%;
+  max-width: 700px;
+  height: 160px;
+  display: block;
+  border: 1px solid rgba(212,175,55,0.15);
+  background: rgba(13,16,24,0.6);
+  cursor: none;
+  border-radius: 2px;
+}
+
 /* RESPONSIVE */
 @media (max-width: 900px) {
   nav { padding: 1rem 1.5rem; }
@@ -286,6 +315,7 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
     <li><a href="#about">About</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#services">Services</a></li>
+    <li><a href="#experience">Experience</a></li>
     <li><a href="#work">Work</a></li>
     <li><a href="#philosophy">Philosophy</a></li>
     <li><a href="#connect">Contact</a></li>
@@ -392,6 +422,26 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
 
 <hr class="div">
 
+<!-- WORK EXPERIENCE -->
+<div class="s" id="experience">
+  <div class="s-label">Experience</div>
+  <h2 class="s-title reveal">Where I've<br><span>Shown Up</span></h2>
+  <div class="services-list reveal">
+    <div class="svc"><span class="svc-num">01</span><span class="svc-name">CroutonJones</span><span class="svc-desc">Represented the brand as Ambassador — driving awareness, community engagement and onchain narrative.</span><span class="svc-tag">Ambassador</span></div>
+    <div class="svc"><span class="svc-num">02</span><span class="svc-name">CluckBet</span><span class="svc-desc">Key Opinion Leader — creating content, building hype and driving community participation.</span><span class="svc-tag">KOL</span></div>
+    <div class="svc"><span class="svc-num">03</span><span class="svc-name">HypeBattle</span><span class="svc-desc">Key Opinion Leader — amplifying the project through strategic content and audience engagement.</span><span class="svc-tag">KOL</span></div>
+    <div class="svc"><span class="svc-num">04</span><span class="svc-name">Puffverse</span><span class="svc-desc">Ambassador — bridging the community with the project's vision and onchain ecosystem.</span><span class="svc-tag">Ambassador</span></div>
+    <div class="svc"><span class="svc-num">05</span><span class="svc-name">Pirate Realm</span><span class="svc-desc">Active contributor helping shape the project's growth, content and community strategy.</span><span class="svc-tag">Contributor</span></div>
+    <div class="svc"><span class="svc-num">06</span><span class="svc-name">Vixichain</span><span class="svc-desc">Contributor — supporting ecosystem growth through content, strategy and community building.</span><span class="svc-tag">Contributor</span></div>
+    <div class="svc"><span class="svc-num">07</span><span class="svc-name">Victus Global</span><span class="svc-desc">Business Development — forging partnerships and building sustainable growth pipelines for the project.</span><span class="svc-tag">Biz Dev</span></div>
+    <div class="svc"><span class="svc-num">08</span><span class="svc-name">AI Steam Labs</span><span class="svc-desc">Personal Assistant — supporting operations, coordination and strategic execution at the executive level.</span><span class="svc-tag">PA</span></div>
+    <div class="svc"><span class="svc-num">09</span><span class="svc-name">The Burrow</span><span class="svc-desc">Contributor & KOL — creating content and driving community engagement across the ecosystem.</span><span class="svc-tag">Contributor / KOL</span></div>
+    <div class="svc"><span class="svc-num">10</span><span class="svc-name">Memecoin Projects</span><span class="svc-desc">Moderated and managed 5+ memecoin communities — maintaining culture, enforcing standards and driving engagement.</span><span class="svc-tag">Mod & Manager</span></div>
+  </div>
+</div>
+
+<hr class="div">
+
 <!-- PHILOSOPHY -->
 <div class="s" id="philosophy">
   <div class="s-label">Philosophy</div>
@@ -432,6 +482,18 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
   </div>
 </div>
 
+<!-- BALL GAME -->
+<div class="game-wrap">
+  <div class="game-label">move the brick · keep it bouncing</div>
+  <div style="position:relative; width:100%; max-width:700px;">
+    <canvas id="gameCanvas"></canvas>
+    <div id="gameOverlay" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;background:rgba(7,9,15,0.75);border:1px solid rgba(212,175,55,0.15);">
+      <p id="overlayMsg" style="font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#9AA0B0;">Ready to play?</p>
+      <button id="gameBtn" onclick="startGame()" style="font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;background:#D4AF37;color:#07090f;border:none;padding:0.8rem 2rem;cursor:pointer;font-weight:500;transition:all .2s;">▶ Play</button>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer>
   <p>© 2025 kosi ♟︎ · @onchain_fiend</p>
@@ -453,6 +515,133 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
       badge.style.background = '';
       badge.style.animation = '';
     }, 2500);
+  }
+
+  // BALL GAME
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  const overlay = document.getElementById('gameOverlay');
+  const overlayMsg = document.getElementById('overlayMsg');
+  const gameBtn = document.getElementById('gameBtn');
+
+  function resizeCanvas() {
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+  }
+  resizeCanvas();
+  window.addEventListener('resize', () => { resizeCanvas(); });
+
+  const GOLD = '#D4AF37';
+  let ball = {}, paddle = {}, animId, running = false;
+
+  function resetBall() {
+    const W = canvas.width, H = canvas.height;
+    paddle = { w: Math.min(120, W * 0.2), h: 8, x: W/2 - 60, y: H - 24 };
+    ball = { r: 7, x: W/2, y: H/2, vx: 3.2, vy: -3.2 };
+  }
+
+  function startGame() {
+    overlay.style.display = 'none';
+    running = true;
+    resetBall();
+    if (animId) cancelAnimationFrame(animId);
+    drawGame();
+  }
+
+  function gameOver() {
+    running = false;
+    cancelAnimationFrame(animId);
+    overlayMsg.textContent = 'You missed it 😅';
+    gameBtn.textContent = '↺ Retry';
+    overlay.style.display = 'flex';
+  }
+
+  window.startGame = startGame;
+
+  // Mouse
+  canvas.addEventListener('mousemove', e => {
+    if (!running) return;
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    paddle.x = (e.clientX - rect.left) * scaleX - paddle.w / 2;
+    paddle.x = Math.max(0, Math.min(canvas.width - paddle.w, paddle.x));
+  });
+
+  // Touch
+  canvas.addEventListener('touchmove', e => {
+    if (!running) return;
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    paddle.x = (e.touches[0].clientX - rect.left) * scaleX - paddle.w / 2;
+    paddle.x = Math.max(0, Math.min(canvas.width - paddle.w, paddle.x));
+  }, { passive: false });
+
+  function drawGame() {
+    const W = canvas.width, H = canvas.height;
+    ctx.clearRect(0, 0, W, H);
+
+    ctx.fillStyle = 'rgba(7,9,15,0.5)';
+    ctx.fillRect(0, 0, W, H);
+
+    // Ball glow
+    const grd = ctx.createRadialGradient(ball.x, ball.y, 0, ball.x, ball.y, ball.r * 4);
+    grd.addColorStop(0, 'rgba(212,175,55,0.25)');
+    grd.addColorStop(1, 'transparent');
+    ctx.fillStyle = grd;
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r * 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Ball
+    ctx.fillStyle = GOLD;
+    ctx.shadowColor = GOLD;
+    ctx.shadowBlur = 12;
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+
+    // Paddle
+    ctx.fillStyle = 'rgba(15,40,90,0.8)';
+    ctx.strokeStyle = GOLD;
+    ctx.lineWidth = 1.5;
+    ctx.shadowColor = GOLD;
+    ctx.shadowBlur = 8;
+    ctx.beginPath();
+    ctx.roundRect(paddle.x, paddle.y, paddle.w, paddle.h, 4);
+    ctx.fill();
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Physics
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+
+    if (ball.x - ball.r < 0) { ball.x = ball.r; ball.vx *= -1; }
+    if (ball.x + ball.r > W) { ball.x = W - ball.r; ball.vx *= -1; }
+    if (ball.y - ball.r < 0) { ball.y = ball.r; ball.vy *= -1; }
+
+    // Paddle bounce
+    if (
+      ball.y + ball.r >= paddle.y &&
+      ball.y - ball.r <= paddle.y + paddle.h &&
+      ball.x >= paddle.x &&
+      ball.x <= paddle.x + paddle.w
+    ) {
+      ball.vy = -Math.abs(ball.vy);
+      const hit = (ball.x - (paddle.x + paddle.w / 2)) / (paddle.w / 2);
+      ball.vx = hit * 4.5;
+      ball.y = paddle.y - ball.r;
+    }
+
+    // Miss
+    if (ball.y - ball.r > H) {
+      gameOver();
+      return;
+    }
+
+    animId = requestAnimationFrame(drawGame);
   }
 
   const cur = document.getElementById('cur');
