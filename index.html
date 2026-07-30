@@ -449,29 +449,10 @@ hr.div { border: none; border-top: 1px solid var(--border); margin: 0 2.5rem; }
 .cta-sub { font-size: 0.9rem; font-weight: 300; color: var(--muted2); }
 
 /* CONNECT */
-.zinn-cta { display: block; margin-top: 2rem; background: linear-gradient(135deg, #1a1200 0%, #2a1f00 50%, #1a1200 100%); border: 1px solid var(--gold); border-radius: 4px; text-decoration: none; transition: all .3s; position: relative; overflow: hidden; }
-.zinn-cta::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, transparent 60%, rgba(212,175,55,0.08)); pointer-events: none; }
-.zinn-cta:hover { box-shadow: 0 0 24px rgba(212,175,55,0.25); transform: translateY(-2px); }
-.zinn-inner { display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 2rem; gap: 2rem; }
-.zinn-left { display: flex; flex-direction: column; gap: 0.4rem; }
-.zinn-tag { font-family: 'DM Mono', monospace; font-size: 0.5rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); }
-.zinn-title { font-family: 'Syne', sans-serif; font-size: 1.2rem; font-weight: 700; color: var(--white); }
-.zinn-sub { font-size: 0.8rem; color: var(--muted); }
-.zinn-right { flex-shrink: 0; }
-.zinn-btn { display: inline-block; background: var(--gold); color: #000; font-family: 'DM Mono', monospace; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.65rem 1.2rem; border-radius: 2px; transition: all .25s; white-space: nowrap; }
-.zinn-cta:hover .zinn-btn { background: #f5cc3a; }
 .vid-wrap { margin-top: 2.5rem; }
 .vid-label { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; }
 .vid-frame { display: flex; justify-content: center; }
 .connect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); }
-.zinn-banner { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; margin-top: 2.5rem; padding: 1.8rem 2.2rem; background: linear-gradient(135deg, rgba(212,175,55,0.12), rgba(212,175,55,0.04)); border: 1px solid rgba(212,175,55,0.45); border-radius: 2px; text-decoration: none; transition: background .25s, border-color .25s, transform .25s; cursor: none; }
-.zinn-banner:hover { background: linear-gradient(135deg, rgba(212,175,55,0.2), rgba(212,175,55,0.08)); border-color: var(--gold); transform: translateY(-2px); }
-.zinn-left { display: flex; flex-direction: column; gap: 0.35rem; }
-.zinn-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.52rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); }
-.zinn-title { font-family: 'Syne', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--white); }
-.zinn-sub { font-size: 0.8rem; color: var(--muted); margin-top: 0.1rem; }
-.zinn-right { display: flex; align-items: center; gap: 0.6rem; white-space: nowrap; font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em; color: var(--gold); border: 1px solid rgba(212,175,55,0.5); padding: 0.55rem 1.1rem; border-radius: 2px; transition: background .25s; }
-.zinn-banner:hover .zinn-right { background: rgba(212,175,55,0.15); }
 .connect-card { background: var(--surface); padding: 2rem; text-decoration: none; display: flex; flex-direction: column; gap: 0.5rem; transition: background .25s; cursor: none; }
 .connect-card:hover { background: var(--surface2); }
 .connect-platform { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
@@ -550,31 +531,201 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
 }
 .g-btn:hover { background: #e8c840; transform: translateY(-1px); }
 
-/* TIC TAC TOE */
-.ttt-wrap {
+/* PENALTY SHOOTOUT */
+.pen-wrap {
+  position: relative;
   display: flex; flex-direction: column; align-items: center;
-  gap: 0.5rem; padding: 1.5rem;
+  gap: 0.9rem; padding: 1.5rem;
   background: rgba(13,16,24,0.6);
   border: 1px solid rgba(212,175,55,0.15);
   width: 100%; max-width: 360px;
 }
-.ttt-grid {
-  display: grid; grid-template-columns: repeat(3,1fr);
-  gap: 3px; background: rgba(212,175,55,0.15);
-  border: 1px solid rgba(212,175,55,0.2); padding: 3px;
-  width: 240px;
+.pen-score {
+  font-family: 'DM Mono', monospace; font-size: 0.7rem;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold);
 }
-.ttt-cell {
+.pen-pitch {
+  position: relative;
+  width: 100%; max-width: 280px; height: 170px;
+  background:
+    repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0 16px, rgba(0,0,0,0.06) 16px 32px),
+    linear-gradient(180deg, rgba(13,107,85,0.4), rgba(13,107,85,0.14) 55%, rgba(8,64,50,0.28));
+  border: 1px solid rgba(212,175,55,0.2); border-radius: 4px;
+  overflow: hidden; perspective: 320px;
+}
+.pen-pitch::before, .pen-pitch::after {
+  content: ''; position: absolute; top: -30px; width: 110px; height: 110px;
+  border-radius: 50%; z-index: -1; pointer-events: none;
+  background: radial-gradient(circle, rgba(255,248,225,0.4), transparent 70%);
+}
+.pen-pitch::before { left: -25px; }
+.pen-pitch::after { right: -25px; }
+.pen-net {
+  position: absolute; top: 6px; left: 8%; right: 8%; height: 54px;
+  background-image:
+    repeating-linear-gradient(0deg, rgba(255,255,255,0.16) 0 1px, transparent 1px 9px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.16) 0 1px, transparent 1px 9px);
+  transform: rotateX(14deg); transform-origin: top center;
+}
+.post {
+  position: absolute; top: -4px; bottom: -8px; width: 6px;
+  background: linear-gradient(180deg, #f5cc3a, #D4AF37 55%, #8a6a1a);
+  border-radius: 3px;
+  box-shadow: 0 3px 5px rgba(0,0,0,.45), inset 1px 0 0 rgba(255,255,255,.4);
+}
+.post-l { left: -3px; }
+.post-r { right: -3px; }
+.crossbar {
+  position: absolute; top: -6px; left: -3px; right: -3px; height: 6px;
+  background: linear-gradient(90deg, #8a6a1a, #f5cc3a 50%, #8a6a1a);
+  border-radius: 3px;
+  box-shadow: 0 3px 5px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.4);
+}
+.pen-keeper {
+  position: absolute; top: 24px; left: 50%;
+  width: 34px; height: 46px;
+  transform: translateX(-50%);
+  transition: left .55s cubic-bezier(.22,.9,.35,1);
+  z-index: 2;
+}
+.pen-keeper::after {
+  content: ''; position: absolute; bottom: -12px; left: 50%;
+  width: 36px; height: 10px; transform: translateX(-50%);
+  background: radial-gradient(ellipse, rgba(0,0,0,0.5), transparent 70%);
+  border-radius: 50%; z-index: -1;
+}
+.k-sprite {
+  position: relative; width: 100%; height: 100%;
+  transform-origin: center bottom;
+  transition: transform .5s cubic-bezier(.22,.9,.35,1);
+  animation: penKeeperIdle 1.6s ease-in-out infinite;
+}
+@keyframes penKeeperIdle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+.k-head {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 13px; height: 13px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f0d2a8, #b9855a);
+  box-shadow: 0 1px 2px rgba(0,0,0,.35);
+}
+.k-body {
+  position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+  width: 18px; height: 20px; border-radius: 6px 6px 3px 3px;
+  background: linear-gradient(150deg, #232a3a, #0d1018 70%);
+  border: 1px solid rgba(212,175,55,.45);
+  box-shadow: inset 0 2px 3px rgba(255,255,255,.08), 0 2px 4px rgba(0,0,0,.35);
+}
+.k-arm {
+  position: absolute; top: 13px; width: 15px; height: 5px; border-radius: 3px;
+  background: linear-gradient(90deg, #0d1018, #D4AF37);
+  transition: transform .45s cubic-bezier(.22,.9,.35,1);
+}
+.k-arm-l { left: -9px; transform: rotate(15deg); }
+.k-arm-r { right: -9px; transform: rotate(-15deg); }
+.k-legs {
+  position: absolute; top: 31px; left: 50%; transform: translateX(-50%);
+  width: 18px; height: 11px;
+}
+.k-leg {
+  position: absolute; top: 0; width: 6px; height: 11px; border-radius: 2px;
+  background: #0d1018;
+}
+.k-leg-l { left: 1px; }
+.k-leg-r { right: 1px; }
+.pen-keeper.dive-left .k-sprite { transform: rotate(-32deg) scale(1.12); animation: none; }
+.pen-keeper.dive-right .k-sprite { transform: rotate(32deg) scale(1.12); animation: none; }
+.pen-keeper.dive-center .k-sprite { transform: scale(1.28); animation: none; }
+.pen-keeper.dive-left { left: 24%; }
+.pen-keeper.dive-right { left: 76%; }
+.pen-keeper.dive-center { left: 50%; }
+.pen-keeper.dive-left .k-arm-l { transform: rotate(35deg); }
+.pen-keeper.dive-left .k-arm-r { transform: rotate(-70deg) translateX(3px); }
+.pen-keeper.dive-right .k-arm-r { transform: rotate(-35deg); }
+.pen-keeper.dive-right .k-arm-l { transform: rotate(70deg) translateX(-3px); }
+.pen-keeper.dive-center .k-arm-l { transform: rotate(60deg); }
+.pen-keeper.dive-center .k-arm-r { transform: rotate(-60deg); }
+.pen-ball {
+  position: absolute; bottom: 10px; left: 50%;
+  transform: translateX(-50%); font-size: 1.4rem; z-index: 3;
+  transition: left .55s cubic-bezier(.25,.7,.35,1), top .55s cubic-bezier(.25,.7,.35,1);
+}
+.ball-spin { display: inline-block; }
+.pen-ball.flying .ball-spin { animation: penBallSpin .55s linear; }
+@keyframes penBallSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.pen-ball.shot-left { left: 24%; top: 26px; }
+.pen-ball.shot-center { left: 50%; top: 14px; }
+.pen-ball.shot-right { left: 76%; top: 26px; }
+.pen-ball.goal-bounce { animation: penGoalPulse .6s ease; }
+.pen-ball.saved-bounce { animation: penSavedShake .5s ease; }
+@keyframes penGoalPulse {
+  0% { transform: translateX(-50%) scale(1); }
+  50% { transform: translateX(-50%) scale(1.5); }
+  100% { transform: translateX(-50%) scale(1); }
+}
+@keyframes penSavedShake {
+  0%, 100% { transform: translateX(-50%); }
+  25% { transform: translateX(-65%); }
+  75% { transform: translateX(-35%); }
+}
+.pen-flash {
+  position: absolute; inset: 0; display: flex;
+  align-items: center; justify-content: center;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem;
+  opacity: 0; pointer-events: none; z-index: 4;
+}
+.pen-flash.show-goal { animation: penFlashPop .9s ease forwards; color: #e8c840; text-shadow: 0 0 10px rgba(232,200,64,.8); }
+.pen-flash.show-saved { animation: penFlashPop .9s ease forwards; color: #cfd3dc; }
+@keyframes penFlashPop {
+  0% { opacity: 0; transform: scale(.5); }
+  20% { opacity: 1; transform: scale(1.25); }
+  45% { transform: scale(1); }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.pen-goal {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 6px; background: rgba(212,175,55,0.15);
+  border: 1px solid rgba(212,175,55,0.2); padding: 6px;
+  width: 260px;
+}
+.pen-zone {
   background: var(--surface);
-  height: 75px; display: flex; align-items: center;
+  height: 60px; display: flex; align-items: center;
   justify-content: center;
-  font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 700;
+  font-size: 1.5rem; font-weight: 700;
   cursor: pointer; transition: background .2s;
 }
-.ttt-cell:hover { background: var(--surface2); }
-.ttt-cell.x { color: var(--gold); }
-.ttt-cell.o { color: var(--accent); }
-.ttt-cell.win { background: rgba(212,175,55,0.15); }
+.pen-zone:hover { background: var(--surface2); }
+.pen-zone.saved { background: rgba(212,175,55,0.25); }
+.pen-zone.scored { background: rgba(13,107,85,0.25); }
+.pen-result {
+  position: absolute; inset: 0; display: flex;
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.5rem; background: rgba(7,9,15,0.85);
+  opacity: 0; pointer-events: none; transition: opacity .3s; z-index: 5;
+}
+.pen-result.show { opacity: 1; pointer-events: auto; }
+.pen-result .pen-trophy { font-size: 2.6rem; animation: penTrophyBounce 1s ease infinite; }
+@keyframes penTrophyBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.pen-result-text {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; color: var(--white);
+}
+.pen-confetti {
+  position: absolute; top: -10px; width: 6px; height: 6px; border-radius: 1px;
+  animation: penConfettiFall 1.4s ease-in forwards;
+}
+@keyframes penConfettiFall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(180px) rotate(360deg); opacity: 0; }
+}
 
 /* CANVASES */
 #pongCanvas, #spaceCanvas {
@@ -693,11 +844,6 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
   .grid-4 { grid-template-columns: repeat(2, 1fr); }
   .flip { height: 155px; }
   .connect-grid { grid-template-columns: 1fr; }
-  .zinn-banner { flex-direction: column; align-items: flex-start; gap: 1.2rem; }
-  .zinn-inner { flex-direction: column; align-items: flex-start; gap: 1rem; padding: 1.2rem 1.25rem; }
-  .zinn-btn { width: 100%; text-align: center; display: block; padding: 0.75rem 1rem; }
-  .zinn-title { font-size: 1rem; }
-  .zinn-sub { font-size: 0.75rem; }
   .pow-url { max-width: 140px; font-size: 0.48rem; }
 }
 </style>
@@ -861,18 +1007,6 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
     <a href="https://www.tiktok.com/@gunslinga_001/video/7628966164592528661" target="_blank" class="pow-item"><span class="pow-n">✦</span><span class="pow-badge design">Video</span><span class="pow-url">Featured Work — TikTok</span><span class="pow-arrow">↗</span></a>
   </div>
 
-  <a href="https://zinnhub.com/zinns/ai-promotional-video-and-video-editing/" target="_blank" class="zinn-cta reveal">
-    <div class="zinn-inner">
-      <div class="zinn-left">
-        <span class="zinn-tag">Featured Product</span>
-        <span class="zinn-title">AI Promo Video & Editing</span>
-        <span class="zinn-sub">Available now on Zinn Hub — book a session directly</span>
-      </div>
-      <div class="zinn-right">
-        <span class="zinn-btn">View on Zinn Hub ↗</span>
-      </div>
-    </div>
-  </a>
 </div>
 
 <hr class="div">
@@ -916,10 +1050,10 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
   <p class="reveal" style="font-size:1rem;font-weight:300;color:var(--muted2);margin-bottom:3rem;line-height:1.75;max-width:520px;">Let's bridge your narrative to the chain. DM me directly or find me across platforms below.</p>
   <div class="connect-grid reveal">
     <a href="https://x.com/onchain_fiend" target="_blank" class="connect-card"><span class="connect-platform">X / Twitter</span><span class="connect-handle">@onchain_fiend</span><span class="connect-arrow">↗</span></a>
-    <a href="https://t.me/Kosiunlocked" target="_blank" class="connect-card"><span class="connect-platform">Telegram</span><span class="connect-handle">t.me/Kosiunlocked</span><span class="connect-arrow">↗</span></a>
-    <a href="https://discord.com" target="_blank" class="connect-card"><span class="connect-platform">Discord</span><span class="connect-handle">@gunslinger_001</span><span class="connect-arrow">↗</span></a>
+    <a href="https://t.me/onchain_fiend" target="_blank" class="connect-card"><span class="connect-platform">Telegram</span><span class="connect-handle">t.me/onchain_fiend</span><span class="connect-arrow">↗</span></a>
+    <a href="https://discord.com" target="_blank" class="connect-card"><span class="connect-platform">Discord</span><span class="connect-handle">@onchain_fiend</span><span class="connect-arrow">↗</span></a>
     <a href="https://youtube.com/@kosi-creates" target="_blank" class="connect-card"><span class="connect-platform">YouTube</span><span class="connect-handle">@kosi-creates</span><span class="connect-arrow">↗</span></a>
-    <a href="https://www.tiktok.com/@gunslinga_001" target="_blank" class="connect-card"><span class="connect-platform">TikTok</span><span class="connect-handle">@gunslinga_001</span><span class="connect-arrow">↗</span></a>
+    <a href="https://www.tiktok.com/@onchain_fiend" target="_blank" class="connect-card"><span class="connect-platform">TikTok</span><span class="connect-handle">@onchain_fiend</span><span class="connect-arrow">↗</span></a>
     <a href="https://mail.google.com/mail/?view=cm&to=okpalavictor396@gmail.com" target="_blank" class="connect-card"><span class="connect-platform">Email</span><span class="connect-handle">okpalavictor396@gmail.com</span><span class="connect-arrow">↗</span></a>
   </div>
 
@@ -940,7 +1074,7 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
   <div class="game-label">🕹 mini arcade · pick a game</div>
   <div class="game-picker">
     <button class="game-pick active" onclick="switchGame('pong', this)">🏓 Ball & Brick</button>
-    <button class="game-pick" onclick="switchGame('tictactoe', this)">⭕ Tic Tac Toe</button>
+    <button class="game-pick" onclick="switchGame('penalty', this)">⚽ Penalty Shootout</button>
   </div>
 
   <!-- PONG -->
@@ -954,22 +1088,39 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
     </div>
   </div>
 
-  <!-- TIC TAC TOE -->
-  <div class="game-screen" id="game-tictactoe">
-    <div class="ttt-wrap">
-      <p class="g-msg" id="tttMsg">Your turn — you are ✕</p>
-      <div class="ttt-grid" id="tttGrid">
-        <div class="ttt-cell" onclick="tttMove(0)"></div>
-        <div class="ttt-cell" onclick="tttMove(1)"></div>
-        <div class="ttt-cell" onclick="tttMove(2)"></div>
-        <div class="ttt-cell" onclick="tttMove(3)"></div>
-        <div class="ttt-cell" onclick="tttMove(4)"></div>
-        <div class="ttt-cell" onclick="tttMove(5)"></div>
-        <div class="ttt-cell" onclick="tttMove(6)"></div>
-        <div class="ttt-cell" onclick="tttMove(7)"></div>
-        <div class="ttt-cell" onclick="tttMove(8)"></div>
+  <!-- PENALTY SHOOTOUT -->
+  <div class="game-screen" id="game-penalty">
+    <div class="pen-wrap" id="penWrap">
+      <p class="g-msg" id="penMsg">Round 1/5 — pick your corner</p>
+      <p class="pen-score" id="penScore">Goals 0 · Saves 0</p>
+      <div class="pen-pitch">
+        <div class="pen-net">
+          <div class="post post-l"></div>
+          <div class="post post-r"></div>
+          <div class="crossbar"></div>
+        </div>
+        <div class="pen-keeper" id="penKeeper">
+          <div class="k-sprite">
+            <div class="k-head"></div>
+            <div class="k-body"></div>
+            <div class="k-arm k-arm-l"></div>
+            <div class="k-arm k-arm-r"></div>
+            <div class="k-legs">
+              <div class="k-leg k-leg-l"></div>
+              <div class="k-leg k-leg-r"></div>
+            </div>
+          </div>
+        </div>
+        <div class="pen-ball" id="penBall"><div class="ball-spin">⚽</div></div>
+        <div class="pen-flash" id="penFlash"></div>
       </div>
-      <button class="g-btn" onclick="resetTTT()" style="margin-top:1rem;">↺ Reset</button>
+      <div class="pen-goal" id="penGoal">
+        <div class="pen-zone" data-zone="left" onclick="penShoot('left', this)">⬅</div>
+        <div class="pen-zone" data-zone="center" onclick="penShoot('center', this)">⬆</div>
+        <div class="pen-zone" data-zone="right" onclick="penShoot('right', this)">➡</div>
+      </div>
+      <button class="g-btn" onclick="resetPenalty()" style="margin-top:1rem;">↺ Reset</button>
+      <div class="pen-result" id="penResult"></div>
     </div>
   </div>
 </div>
@@ -1137,89 +1288,95 @@ footer p { font-family: 'DM Mono', monospace; font-size: 0.55rem; letter-spacing
   }
 
   // ══════════════════════════════
-  // ⭕ TIC TAC TOE vs AI
+  // ⚽ PENALTY SHOOTOUT
   // ══════════════════════════════
-  let tttBoard = Array(9).fill(''), tttOver = false;
+  const PEN_TOTAL = 5;
+  let penRound = 0, penGoals = 0, penSaves = 0, penOver = false, penBusy = false;
 
-  function tttMove(i) {
-    if (tttBoard[i] || tttOver) return;
-    tttBoard[i] = 'X';
-    renderTTT();
-    const w = checkTTT();
-    if (w) { endTTT(w, 'X'); return; }
-    if (tttBoard.every(c=>c)) { endTTT(null, null); return; }
-    document.getElementById('tttMsg').textContent = 'AI thinking...';
-    setTimeout(() => { aiMoveTTT(); }, 350);
-  }
-  window.tttMove = tttMove;
+  function penShoot(zone, el) {
+    if (penOver || penBusy) return;
+    penBusy = true;
+    const dirs = ['left','center','right'];
+    const keeperDive = dirs[Math.floor(Math.random()*3)];
+    const scored = zone !== keeperDive;
+    penRound++;
+    if (scored) penGoals++; else penSaves++;
 
-  function aiMoveTTT() {
-    let best = -Infinity, move = -1;
-    tttBoard.forEach((c,i) => {
-      if (!c) {
-        tttBoard[i]='O';
-        const s = minimax(tttBoard, 0, false);
-        tttBoard[i]='';
-        if (s>best) { best=s; move=i; }
+    const ball = document.getElementById('penBall');
+    const keeper = document.getElementById('penKeeper');
+    const flash = document.getElementById('penFlash');
+
+    ball.className = 'pen-ball';
+    keeper.className = 'pen-keeper';
+    flash.className = 'pen-flash';
+    document.querySelectorAll('.pen-zone').forEach(z => z.classList.remove('saved','scored'));
+
+    // kick off ball + keeper animation together
+    requestAnimationFrame(() => {
+      ball.classList.add('shot-' + zone, 'flying');
+      keeper.classList.add('dive-' + keeperDive);
+    });
+
+    setTimeout(() => {
+      ball.classList.add(scored ? 'goal-bounce' : 'saved-bounce');
+      flash.textContent = scored ? 'GOAL!' : 'SAVED!';
+      flash.className = 'pen-flash ' + (scored ? 'show-goal' : 'show-saved');
+      el.classList.add(scored ? 'scored' : 'saved');
+      document.getElementById('penMsg').textContent = scored ? 'GOAL! ⚽' : 'SAVED! 🧤';
+      document.getElementById('penScore').textContent = `Goals ${penGoals} · Saves ${penSaves}`;
+    }, 480);
+
+    setTimeout(() => {
+      document.querySelectorAll('.pen-zone').forEach(z => z.classList.remove('saved','scored'));
+      ball.className = 'pen-ball';
+      keeper.className = 'pen-keeper';
+      flash.className = 'pen-flash';
+
+      if (penRound >= PEN_TOTAL) {
+        penOver = true;
+        showPenResult();
+      } else {
+        document.getElementById('penMsg').textContent = `Round ${penRound+1}/${PEN_TOTAL} — pick your corner`;
+        penBusy = false;
       }
-    });
-    if (move>=0) tttBoard[move]='O';
-    renderTTT();
-    const w = checkTTT();
-    if (w) { endTTT(w, 'O'); return; }
-    if (tttBoard.every(c=>c)) { endTTT(null,null); return; }
-    document.getElementById('tttMsg').textContent = 'Your turn — you are ✕';
+    }, 1600);
   }
+  window.penShoot = penShoot;
 
-  function minimax(board, depth, isMax) {
-    const w = checkTTT(board);
-    if (w==='O') return 10-depth;
-    if (w==='X') return depth-10;
-    if (board.every(c=>c)) return 0;
-    if (isMax) {
-      let best=-Infinity;
-      board.forEach((c,i)=>{ if(!c){ board[i]='O'; best=Math.max(best,minimax(board,depth+1,false)); board[i]=''; } });
-      return best;
-    } else {
-      let best=Infinity;
-      board.forEach((c,i)=>{ if(!c){ board[i]='X'; best=Math.min(best,minimax(board,depth+1,true)); board[i]=''; } });
-      return best;
+  function showPenResult() {
+    const result = document.getElementById('penResult');
+    let icon, text;
+    if (penGoals > penSaves) { icon = '🏆'; text = 'You won the shootout!'; }
+    else if (penGoals === penSaves) { icon = '🤝'; text = "It's a draw"; }
+    else { icon = '🧤'; text = 'Keeper wins'; }
+
+    let confetti = '';
+    if (penGoals > penSaves) {
+      const colors = ['#D4AF37','#e8c840','#0D6B55','#ffffff'];
+      for (let i = 0; i < 16; i++) {
+        const left = Math.random() * 100;
+        const delay = (Math.random() * 0.5).toFixed(2);
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        confetti += `<span class="pen-confetti" style="left:${left}%; animation-delay:${delay}s; background:${color};"></span>`;
+      }
     }
+    result.innerHTML = `${confetti}<div class="pen-trophy">${icon}</div><div class="pen-result-text">${text}</div><button class="g-btn" onclick="resetPenalty()" style="margin-top:0.4rem;">↺ Play Again</button>`;
+    result.classList.add('show');
   }
 
-  function checkTTT(board=tttBoard) {
-    const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-    for (const [a,b,c] of wins) if (board[a]&&board[a]===board[b]&&board[a]===board[c]) return board[a];
-    return null;
+  function resetPenalty() {
+    penRound = 0; penGoals = 0; penSaves = 0; penOver = false; penBusy = false;
+    document.querySelectorAll('.pen-zone').forEach(z => z.classList.remove('saved','scored'));
+    document.getElementById('penScore').textContent = 'Goals 0 · Saves 0';
+    document.getElementById('penMsg').textContent = `Round 1/${PEN_TOTAL} — pick your corner`;
+    document.getElementById('penBall').className = 'pen-ball';
+    document.getElementById('penKeeper').className = 'pen-keeper';
+    document.getElementById('penFlash').className = 'pen-flash';
+    const result = document.getElementById('penResult');
+    result.classList.remove('show');
+    result.innerHTML = '';
   }
-
-  function renderTTT() {
-    document.querySelectorAll('.ttt-cell').forEach((cell,i) => {
-      cell.textContent = tttBoard[i]==='X' ? '✕' : tttBoard[i]==='O' ? '○' : '';
-      cell.className = 'ttt-cell' + (tttBoard[i]==='X'?' x':tttBoard[i]==='O'?' o':'');
-    });
-  }
-
-  function endTTT(wins, winner) {
-    tttOver = true;
-    const msg = winner==='X'?'You won! 🎉':winner==='O'?'AI wins 🤖':'Draw! 🤝';
-    document.getElementById('tttMsg').textContent = msg;
-    if (wins) {
-      const cells = document.querySelectorAll('.ttt-cell');
-      [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]].forEach(([a,b,c])=>{
-        if (tttBoard[a]&&tttBoard[a]===tttBoard[b]&&tttBoard[a]===tttBoard[c]) {
-          [a,b,c].forEach(i=>cells[i].classList.add('win'));
-        }
-      });
-    }
-  }
-
-  function resetTTT() {
-    tttBoard=Array(9).fill(''); tttOver=false;
-    renderTTT();
-    document.getElementById('tttMsg').textContent='Your turn — you are ✕';
-  }
-  window.resetTTT = resetTTT;
+  window.resetPenalty = resetPenalty;
 
   window.addEventListener('resize',()=>{
     initPongCanvas();
